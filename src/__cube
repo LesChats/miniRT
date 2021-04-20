@@ -1,0 +1,88 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cube.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/14 16:06:57 by abaudot           #+#    #+#             */
+/*   Updated: 2021/04/19 21:44:50 by abaudot          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "parser.h"
+#include "vectors.h" 
+
+static void parse_sqr(uint32_t i, t_vec3f *data, t_vec3f *pnor, t_sqr *sq)
+{
+//	static const float invS = 1.f / sqrtf(2);
+	const float size = data[4][0] * (1.f - 2.f * (i % 2));
+	t_vec3f large;
+	t_vec3f tmp;
+
+	equal_(sq->n, data[i % 3]);
+	//printf("%d\n", i);
+//	pv(sq->n);
+	printf("\n");
+	s_scale(data[i % 3], size * INVSQ2, tmp);
+//	printf("i: %d size = %.4f data = %f\n", i, size, data[4][0]);
+//	pv(tmp);
+//	printf("\n");
+	add_(data[3], tmp, sq->pts);
+	s_scale(pnor[i % 3], 0.0001, large);
+	add_(pnor[(i + 1) % 3], pnor[(i + 2) % 3], tmp);
+	s_scale(tmp, data[4][0] * INVSQ2, tmp);
+	add_(tmp, large, tmp);
+	add_(sq->pts, tmp, sq->max);
+	sub_(sq->pts, tmp, sq->min);
+}
+
+static void many_sqr(struct s_preScene *ps, uint32_t *pos_num,
+		t_vec3f *data, t_material *m)
+{
+	t_sqr	*sqr;
+	t_vec3f	pnor[3];
+	uint32_t	i;
+
+	set_vector(pnor[0], fabs(data[0][0]), fabs(data[0][1]), fabs(data[0][2]));
+	set_vector(pnor[1], fabs(data[1][0]), fabs(data[1][1]), fabs(data[1][2]));
+	set_vector(pnor[2], fabs(data[2][0]), fabs(data[2][1]), fabs(data[2][2]));
+	i = 0;
+	while (i < 6)
+	{
+		sqr = (t_sqr*)(ps->prmtvs_data + *pos_num);
+		ps->prmtvs.prmtvs[pos_num[1]].prmtv = sqr;
+		ps->prmtvs.prmtvs[pos_num[1]].mtrl = ps->mtrls_data + pos_num[1];
+		ps->prmtvs.prmtvs[pos_num[1]].type = SQ;
+		parse_sqr(i, data, pnor, sqr);
+		*(ps->mtrls_data + pos_num[1]) = *m;
+		++pos_num[1];
+		*pos_num += sizeof(t_sqr);
+		++i;
+	}
+}
+
+uint8_t	cub_parser(struct s_preScene *ps, const char *s, uint32_t *pos_num)
+{
+	t_vec3f nor[5];
+	t_material *mat;
+	
+	if (!(vect_parse(nor[3], &s)))
+		return (return_message("bad vector for cube center"));
+//	if (!(vect_parse(nor[0], &s)))
+//		return (return_message("bad vector for cube normal"));
+//	normalize(nor[0]);
+	nor[4][0] = ft_atof(&s);
+	mat = ps->mtrls_data + pos_num[1];
+	if (!parse_mat(mat,  &s, ps->mlx))
+		return (return_message("bad material for cube"));
+	if (!nor[0][0])
+		crossp(nor[0], (t_vec3f){1, 0, 0}, nor[1]);
+	else
+		crossp(nor[0], (t_vec3f){0, 1, 0}, nor[1]);
+	normalize(nor[1]);
+	crossp(nor[0], nor[1], nor[2]);
+	normalize(nor[2]);
+	many_sqr(ps, pos_num, nor, mat);
+	return (1);
+}
