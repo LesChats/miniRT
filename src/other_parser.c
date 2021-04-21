@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   nonPrimitv_parser.c                                :+:      :+:    :+:   */
+/*   other_parser.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/16 17:13:51 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/18 19:03:08 by abaudot          ###   ########.fr       */
+/*   Created: 2021/04/21 11:10:39 by abaudot           #+#    #+#             */
+/*   Updated: 2021/04/21 12:42:47 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "parser.h"
 #include "vectors.h"
 
-uint8_t rsltn_parser(struct s_preScene *ps, const char *s,
-	   	uint32_t *pos_num)
+uint8_t	rsltn_parser(struct s_prescene *ps, const char *s,
+		uint32_t *pos_num)
 {
 	*pos_num = *pos_num;
 	ps->rsltn[0] = ft_atoi(&s);
@@ -23,8 +24,8 @@ uint8_t rsltn_parser(struct s_preScene *ps, const char *s,
 	return (1);
 }
 
-uint8_t lght_parser(struct s_preScene *ps, const char *s,
-	   	uint32_t *pos_num)
+uint8_t	lght_parser(struct s_prescene *ps, const char *s,
+		uint32_t *pos_num)
 {
 	static uint32_t lght_pos = 0;
 	t_lght *const	lght = ps->lghts.lghts + lght_pos++;
@@ -35,28 +36,28 @@ uint8_t lght_parser(struct s_preScene *ps, const char *s,
 	if (!(vect_parse(lght->pts, &s)))
 		return (return_message("Bad vector parse for lights position"));
 	intensity = ft_atof(&s);
-	if(!(vect_parse(tmp, &s)))
+	if (!(vect_parse(tmp, &s)))
 		return (return_message("Bad vector parse for lights color"));
-	s_scale(tmp, COLOR_INV,tmp);
+	s_scale(tmp, COLOR_INV, tmp);
 	s_scale(tmp, intensity, lght->color);
 	return (1);
 }
 
-uint8_t ambnt_parser(struct s_preScene *ps, const char *s,
-	   	uint32_t *pos_num)
+uint8_t	ambnt_parser(struct s_prescene *ps, const char *s,
+		uint32_t *pos_num)
 {
-	t_vec3f tmp;
-	const float intensity = ft_atof(&s);
+	t_vec3f		tmp;
+	const float	intensity = ft_atof(&s);
 
 	*pos_num = *pos_num;
 	if (!(vect_parse(tmp, &s)))
 		return (return_message("Bad vector parse for ambiante color"));
-	s_scale(tmp, COLOR_INV,tmp);
+	s_scale(tmp, COLOR_INV, tmp);
 	s_scale(tmp, intensity, ps->lghts.amb);
 	return (1);
 }
 
-uint8_t parse_mat(t_material *m, const char **s, void *mlx)
+uint8_t	parse_mat(t_material *m, const char **s, void *mlx)
 {
 	t_vec3f tmp;
 
@@ -77,16 +78,16 @@ uint8_t parse_mat(t_material *m, const char **s, void *mlx)
 	if (m->colortype > 6 || m->type > 2 || m->colortype < 0 || m->type < 0)
 		return (return_message("type error in materials parsing"));
 	if (m->colortype == 6)
-		grabTexture(mlx, &m->text, s);
+		grabtexture(mlx, &m->text, s);
 	m->bump = ft_atof(s);
 	return (1);
 }
 
-uint8_t cams_parser(struct s_preScene *ps, const char *s,
-	   	uint32_t *pos_num)
+uint8_t	cams_parser(struct s_prescene *ps, const char *s,
+		uint32_t *pos_num)
 {
-	static uint32_t cam_nb = 0;
-	t_cam *const cam = (ps->cams.cams + cam_nb++);
+	static uint32_t	cam_nb = 0;
+	t_cam *const	cam = (ps->cams.cams + cam_nb++);
 
 	*pos_num = *pos_num;
 	if (!(vect_parse(cam->pts, &s)))

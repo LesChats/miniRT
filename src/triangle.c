@@ -6,19 +6,18 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 14:13:40 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/19 12:13:34 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/04/21 12:26:12 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "bvh.h"
 
-void	trgl_nrml(const void *const trgl, t_hInfo *hi)
+void	trgl_nrml(const void *const trgl, t_hinfo *hi)
 {
 	const t_trgl *t = (t_trgl*)trgl;
 
 	equal_(hi->n, t->n);
-
 }
 
 void	trgl_hit(const void *trgl, const t_ray *r, struct s_hit *h,
@@ -28,17 +27,17 @@ void	trgl_hit(const void *trgl, const t_ray *r, struct s_hit *h,
 	t_vec3f			vect[2];
 	float			ab[3];
 
-	crossp(r->d, tr->e2, vect[0]); // h
-	ab[0] = dotp(tr->e1, vect[0]); //a
+	crossp(r->d, tr->e2, vect[0]);
+	ab[0] = dotp(tr->e1, vect[0]);
 	if (ab[0] == 0)
 		return ;
 	ab[0] = 1.f / ab[0];
-	sub_(r->o, tr->p1, vect[1]); // s
-	ab[1] = ab[0] * dotp(vect[1], vect[0]); //u
+	sub_(r->o, tr->p1, vect[1]);
+	ab[1] = ab[0] * dotp(vect[1], vect[0]);
 	if (ab[1] < 0.0 || ab[1] > 1.0)
 		return ;
-	crossp(vect[1], tr->e1, vect[0]); //q
-	ab[2] = ab[0] * dotp(r->d, vect[0]);//v
+	crossp(vect[1], tr->e1, vect[0]);
+	ab[2] = ab[0] * dotp(r->d, vect[0]);
 	if (ab[2] < 0.0 || ab[1] + ab[2] > 1.0)
 		return ;
 	ab[1] = ab[0] * dotp(tr->e2, vect[0]);
@@ -62,26 +61,26 @@ uint8_t	trgl_bounding(const void *trgl, t_box *bbox)
 	return (1);
 }
 
-uint8_t	trgl_parser(struct s_preScene *ps, const char *s, uint32_t *pos_num)
+uint8_t	trgl_parser(struct s_prescene *ps, const char *s, uint32_t *pos_num)
 {
 	t_trgl *trgl;
-	
+
 	trgl = (t_trgl*)(ps->prmtvs_data + *pos_num);
 	ps->prmtvs.prmtvs[pos_num[1]].prmtv = trgl;
 	ps->prmtvs.prmtvs[pos_num[1]].mtrl = ps->mtrls_data + pos_num[1];
 	ps->prmtvs.prmtvs[pos_num[1]].type = T;
 	if (!(vect_parse(trgl->p1, &s)))
-		return (return_message("Bad vector parsing point n1 in triangle"));	
+		return (return_message("Bad vector parsing point n1 in triangle"));
 	if (!(vect_parse(trgl->p2, &s)))
-		return (return_message("Bad vector parsing point n2 in triangle"));	
+		return (return_message("Bad vector parsing point n2 in triangle"));
 	if (!(vect_parse(trgl->p3, &s)))
-		return (return_message("Bad vector parsing point n3 in triangle"));	
+		return (return_message("Bad vector parsing point n3 in triangle"));
 	sub_(trgl->p2, trgl->p1, trgl->e1);
 	sub_(trgl->p3, trgl->p1, trgl->e2);
 	crossp(trgl->e1, trgl->e2, trgl->n);
 	normalize(trgl->n);
 	if (!parse_mat(ps->mtrls_data + pos_num[1], &s, ps->mlx))
-		return(return_message("Bad material for triangle"));
+		return (return_message("Bad material for triangle"));
 	++pos_num[1];
 	*pos_num += sizeof(t_trgl);
 	return (1);

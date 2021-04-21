@@ -6,7 +6,7 @@
 #    By: abaudot <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/19 20:59:34 by abaudot           #+#    #+#              #
-#    Updated: 2021/04/20 13:04:12 by abaudot          ###   ########.fr        #
+#    Updated: 2021/04/21 13:38:40 by abaudot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,9 +15,10 @@ CC = gcc
 
 NUM_THREADS = $(shell nproc --all)
 alias = 1
+ANTI = $$(( $(alias) * $(alias) ))
 
 CFLAGS = -Wall -Wextra -Werror -D NUM_THREADS=$(NUM_THREADS) 
-CFLAGS += -D ANTIALIASING=$(alias)
+CFLAGS += -D ANTIALIASING=$(alias) -D ANTI2=$(ANTI)
 CFLAGS += -Iincludes -Imlx_linux -Ofast
 LDFLAGS = -Lmlx_linux -lmlx -lXext -lX11 -lm -lbsd -lpthread
 
@@ -33,8 +34,8 @@ GRN			= \033[32;1m
 YEL			= \033[33;1m
 BLU			= \033[34;1m
 
-include src/src.mk
-include includes/inc.mk
+include make_deps/src.mk
+include make_deps/inc.mk
 
 OBJS = $(patsubst src/%.c, $(OBJS_DIR)/%.o, $(SRCS))
 

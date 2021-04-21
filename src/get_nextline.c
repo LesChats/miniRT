@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   getNextLine.c                                      :+:      :+:    :+:   */
+/*   get_nextline.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/08 16:37:13 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/19 10:30:10 by abaudot          ###   ########.fr       */
+/*   Created: 2021/04/20 20:00:54 by abaudot           #+#    #+#             */
+/*   Updated: 2021/04/20 20:02:07 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int32_t		get_nl(const char *s, uint32_t n)
 	return (-1);
 }
 
-static int32_t		read_line(int32_t fd, t_string *str, char *sheet, 
+static int32_t		read_line(int32_t fd, t_string *str, char *sheet,
 		int32_t *sheet_len)
 {
 	int32_t	a_nl;
@@ -53,12 +53,12 @@ static int32_t		read_line(int32_t fd, t_string *str, char *sheet,
 		if (!(update_string(str, sheet, *sheet_len)))
 			return (-1);
 	}
-//	str->s = 0;
+	//str->s = 0;
 	*sheet = 0;
 	return (-(*sheet_len == -1));
 }
 
-int32_t				getNextLine(int32_t fd, t_string *my_line)
+int32_t				getnextline(int32_t fd, t_string *my_line)
 {
 	static char		sheets[READ_BUFFSZ + 1];
 	static int32_t	sheet_len;

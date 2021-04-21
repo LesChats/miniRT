@@ -6,20 +6,19 @@
 /*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 12:59:13 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/05 21:58:47 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/04/21 10:35:29 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-uint8_t		update_string(t_string *str, const char *src, int32_t n)
+uint8_t				update_string(t_string *str, const char *src, int32_t n)
 {
-	char		*tmp;
+	char			*tmp;
 	const uint32_t	wanted = n + str->len;
 
 	if (str->size < wanted)
 	{
-		//printf("warning\n");
 		while (str->size < wanted)
 			str->size <<= 1;
 		tmp = str->s;
@@ -37,9 +36,9 @@ uint8_t		update_string(t_string *str, const char *src, int32_t n)
 	return (1);
 }
 
-uint8_t		initilize_string(t_string *string, uint32_t n)
+uint8_t				initilize_string(t_string *string, uint32_t n)
 {
-	if (!(string->s = (char *)malloc(n)))
+	if (!(string->s = (char*)malloc(n)))
 		return (0);
 	*string->s = 0;
 	string->len = 0;
@@ -47,7 +46,7 @@ uint8_t		initilize_string(t_string *string, uint32_t n)
 	return (1);
 }
 
-static inline void		wordcopy(uint64_t dstp, uint64_t srcp, uint32_t len)
+static inline void	wordcopy(uint64_t dstp, uint64_t srcp, uint32_t len)
 {
 	register uint64_t a0;
 	register uint64_t a1;
@@ -73,7 +72,7 @@ static inline void		wordcopy(uint64_t dstp, uint64_t srcp, uint32_t len)
 	}
 }
 
-void					ft_memcpy(void *dest, const void *src, uint32_t n)
+void				ft_memcpy(void *dest, const void *src, uint32_t n)
 {
 	uint64_t	dstp;
 	uint64_t	srcp;

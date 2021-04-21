@@ -6,34 +6,30 @@
 /*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 19:00:21 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/19 12:18:19 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/04/21 13:48:37 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "bvh.h"
 
-void	pln_nrml(const void *const pln, t_hInfo *hi)
+void	pln_nrml(const void *const pln, t_hinfo *hi)
 {
-	t_pln *pl = (t_pln*)pln;
-
-	//add_(p, pl->n, n);
+	const t_pln *const pl = (t_pln*)pln;
 
 	equal_(hi->n, pl->n);
-	//inv_(n,n);
 }
 
-void pln_hit(const void *pln, const t_ray *r, struct s_hit *h,
+void	pln_hit(const void *pln, const t_ray *r, struct s_hit *h,
 		const uint32_t res)
 {
-	t_pln		*pl = (t_pln*)pln;
+	const t_pln	*pl = (t_pln*)pln;
 	const float	deno = dotp(r->d, pl->n);
 	t_vec3f		tmp;
 
 	if (deno < 0.01 && deno > -0.01)
 		return ;
 	sub_(pl->pts, r->o, tmp);
-	//float a = (dotp(tmp, pl->n) / deno);
 	tmp[0] = (dotp(tmp, pl->n) / deno);
 	if (tmp[0] < h->t && tmp[0] > h->min)
 	{
@@ -43,19 +39,19 @@ void pln_hit(const void *pln, const t_ray *r, struct s_hit *h,
 	}
 }
 
-uint8_t pln_bounding(const void *pln, t_box *bbox)
+uint8_t	pln_bounding(const void *pln, t_box *bbox)
 {
-	const t_pln *const p = (t_pln *)pln;
-	t_vec3f u;
-	t_vec3f v;
-	t_vec3f tmp;
+	const t_pln *const	p = (t_pln *)pln;
+	t_vec3f				u;
+	t_vec3f				v;
+	t_vec3f				tmp;
 
 	if (!p->n[0])
 		crossp(p->n, (t_vec3f){1, 0, 0}, u);
 	else
 		crossp(p->n, (t_vec3f){0, 1, 0}, u);
 	normalize(u);
-	crossp(p->n, u , v);
+	crossp(p->n, u, v);
 	normalize(v);
 	add_(u, v, tmp);
 	set_vector(tmp, fabs(tmp[0]), fabs(tmp[1]), fabs(tmp[2]));
@@ -65,10 +61,10 @@ uint8_t pln_bounding(const void *pln, t_box *bbox)
 	return (1);
 }
 
-uint8_t	pln_parser(struct s_preScene *ps, const char *s, uint32_t *pos_num)
+uint8_t	pln_parser(struct s_prescene *ps, const char *s, uint32_t *pos_num)
 {
 	t_pln *pln;
-	
+
 	pln = (t_pln *)(ps->prmtvs_data + *pos_num);
 	ps->prmtvs.prmtvs[pos_num[1]].prmtv = pln;
 	ps->prmtvs.prmtvs[pos_num[1]].mtrl = ps->mtrls_data + pos_num[1];

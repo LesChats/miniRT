@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   freeAssange.c                                      :+:      :+:    :+:   */
+/*   free_assange.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/19 13:44:33 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/19 13:55:23 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/04/21 13:42:46 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 **	Seriously... free him
 */
 
-static void free_scene(struct s_scene *s, void *mlx)
+static void	free_scene(struct s_scene *s, void *mlx)
 {
 	uint32_t i;
-	
+
 	i = 0;
 	while (i < s->cams.count)
 		mlx_destroy_image(mlx, s->cams.cams[i++].img);
@@ -29,7 +29,7 @@ static void free_scene(struct s_scene *s, void *mlx)
 	while (i < s->count)
 	{
 		if (s->mtrls[i].colortype == 6 && s->mtrls[i].text.img)
-				mlx_destroy_image(mlx, s->mtrls[i].text.img);
+			mlx_destroy_image(mlx, s->mtrls[i].text.img);
 		++i;
 	}
 	free(s->prmtvs);
@@ -38,16 +38,16 @@ static void free_scene(struct s_scene *s, void *mlx)
 	free(s->render.bvh.nodes);
 }
 
-static void free_sky(struct s_skybox *sky, void *mlx)
+static void	free_sky(struct s_skybox *sky, void *mlx)
 {
 	uint32_t i;
-	
+
 	i = 0;
 	while (i < 6)
-		mlx_destroy_image(mlx, sky->skyImg[i++]);
+		mlx_destroy_image(mlx, sky->skyimg[i++]);
 }
 
-int  end_wind(struct s_mlx *m)
+int			end_wind(struct s_mlx *m)
 {
 	mlx_destroy_window(m->mlx, m->mlx_win);
 	if (*m->s->render.sky.skybox)
@@ -55,5 +55,5 @@ int  end_wind(struct s_mlx *m)
 	free_scene(m->s, m->mlx);
 	mlx_destroy_display(m->mlx);
 	free(m->mlx);
-	exit (0);
+	exit(0);
 }

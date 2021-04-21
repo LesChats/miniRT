@@ -3,45 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   count_prmtvs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/14 16:37:57 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/18 15:33:53 by abaudot          ###   ########.fr       */
+/*   Created: 2021/04/21 10:02:32 by abaudot           #+#    #+#             */
+/*   Updated: 2021/04/21 11:35:00 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-static inline uint8_t update(uint32_t *prmtv_arr, t_string *track, uint32_t i)
+static inline uint8_t	update(uint32_t *prmtv_arr, t_string *track,
+		uint32_t i)
 {
 	const char c = '0' + i;
-	
+
 	++prmtv_arr[i];
 	return (update_string(track, &c, 1));
 }
 
-static uint8_t check_compound(const char a, const char b, uint32_t *prmtv_arr,
-		t_string *track)
+static uint8_t			check_compound(const char a, const char b,
+		uint32_t *prmtv_arr, t_string *track)
 {
 	if ((a == 'p') & (b == 'y'))
 	{
 		++prmtv_arr[SQ];
 		prmtv_arr[T] += 4;
 		return (update_string(track, "8", 1));
-		//return (update(prmtv_arr, track, PY));
 	}
 	if ((a == 'c') & (b == 'b'))
 	{
 		prmtv_arr[SQ] += 6;
 		return (update_string(track, "9", 1));
-		//return (update(prmtv_arr, track, CB));
 	}
 	else
 		return (return_message("primitive not reconnized !"));
 }
 
-static uint8_t add_prmtv(const char a, const char b,
-	   	uint32_t *prmtv_arr, t_string *track)
+static uint8_t			add_prmtv(const char a, const char b,
+		uint32_t *prmtv_arr, t_string *track)
 {
 	if (a == 'A')
 		return (update_string(track, ":", 1));
@@ -68,15 +67,16 @@ static uint8_t add_prmtv(const char a, const char b,
 	return (1);
 }
 
-uint8_t	count_prmtvs(uint32_t *prmtvs_arr, t_string *tracker, const int fd)
+uint8_t					count_prmtvs(uint32_t *prmtvs_arr, t_string *tracker,
+		const int fd)
 {
 	t_string	s;
-	
+
 	if (!initilize_string(&s, 64))
 		return (return_message("string init error: file count_prmtv.c"));
 	if (!initilize_string(tracker, 64))
 		return (return_message("string init error: file count_prmtv.c"));
-	while (getNextLine(fd, &s) > 0)
+	while (getnextline(fd, &s) > 0)
 	{
 		s.len = 0;
 		if ((!*s.s) | (*s.s == '#'))
@@ -89,6 +89,5 @@ uint8_t	count_prmtvs(uint32_t *prmtvs_arr, t_string *tracker, const int fd)
 		}
 	}
 	free(s.s);
-	//printf("%s\n", tracker->s);
 	return (1);
 }

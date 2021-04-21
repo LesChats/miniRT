@@ -6,13 +6,13 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 12:26:58 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/19 16:50:50 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/04/21 11:15:41 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-static float decimal_tab(uint8_t i)
+static float	decimal_tab(uint8_t i)
 {
 	if (i == 0)
 		return (0.1f);
@@ -33,14 +33,13 @@ static float decimal_tab(uint8_t i)
 	return (0.000000001f);
 }
 
-float ft_atof(const char **s)
+float			ft_atof(const char **s)
 {
 	float				res;
 	int					i;
 	uint8_t				tmp;
 	uint8_t				neg;
 
-	//printf("atof s = %s\n", *s);
 	while (**s == ' ' || **s == '\t')
 		++(*s);
 	if ((neg = (**s == '-')))
@@ -59,16 +58,15 @@ float ft_atof(const char **s)
 	*s += i;
 	if (neg)
 		res *= -1.0f;
-	//printf("atof res = %f\n", res);
 	return (res);
 }
 
-int32_t	ft_atoi(const char **s)
+int32_t			ft_atoi(const char **s)
 {
-	int32_t	res;
-	uint8_t	neg;
-	unsigned char tmp;
-	
+	int32_t			res;
+	uint8_t			neg;
+	unsigned char	tmp;
+
 	while ((**s == ' ') | (**s == '\t'))
 		++(*s);
 	if ((neg = (**s == '-')))
@@ -85,14 +83,11 @@ int32_t	ft_atoi(const char **s)
 	return (res);
 }
 
-uint8_t	vect_parse(t_vec3f v, const char **s)
+uint8_t			vect_parse(t_vec3f v, const char **s)
 {
-	//while (**s == ' ' || **s == '\t')
-	//	++(*s); // no need because atof doseit
 	v[0] = ft_atof(s);
 	if (**s != ',')
 		return (0);
-	//printf("0 ok\n");
 	++(*s);
 	v[1] = ft_atof(s);
 	if (**s != ',')
@@ -102,7 +97,7 @@ uint8_t	vect_parse(t_vec3f v, const char **s)
 	return (1);
 }
 
-int	ft_strncmp(const char *s1, const char *s2, int n)
+int				ft_strncmp(const char *s1, const char *s2, int n)
 {
 	if (!n)
 		return (0);

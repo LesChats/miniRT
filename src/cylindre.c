@@ -6,19 +6,19 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 13:38:32 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/19 12:13:58 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/04/21 13:41:08 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "bvh.h"
 
-void	cyl_nrml(const void *const cyl, t_hInfo *hi)
+void			cyl_nrml(const void *const cyl, t_hinfo *hi)
 {
-	const t_cyl *c = (t_cyl*)cyl;
-	t_vec3f oc;
-	t_vec3f tmp;
-	float y;
+	const t_cyl	*c = (t_cyl*)cyl;
+	t_vec3f		oc;
+	t_vec3f		tmp;
+	float		y;
 
 	sub_(hi->r->o, hi->n, oc);
 	sub_(oc, c->pa, oc);
@@ -33,32 +33,33 @@ void	cyl_nrml(const void *const cyl, t_hInfo *hi)
 	s_scale(c->aa, 1.f / (c->aa_length * (1 - 2 * (y < 0))), hi->n);
 }
 
-static float setXyabc(const t_cyl *cyl, const t_ray *r, float *xyhabc)
+static float	setxyabc(const t_cyl *cyl, const t_ray *r, float *xyhabc)
 {
 	t_vec3f	oc;
 
 	sub_(r->o, cyl->pa, oc);
-	xyhabc[0] = dotp(cyl->aa, r->d); //card
-	xyhabc[1] = dotp(cyl->aa, oc); // caoc
-	xyhabc[3] = cyl->aa_length - xyhabc[0] * xyhabc[0]; //a
-	xyhabc[4] = cyl->aa_length * dotp(oc, r->d) - xyhabc[1] * xyhabc[0]; //b
-	xyhabc[5] = cyl->aa_length * dotp(oc, oc) - xyhabc[1] * xyhabc[1] //c
+	xyhabc[0] = dotp(cyl->aa, r->d);
+	xyhabc[1] = dotp(cyl->aa, oc);
+	xyhabc[3] = cyl->aa_length - xyhabc[0] * xyhabc[0];
+	xyhabc[4] = cyl->aa_length * dotp(oc, r->d) - xyhabc[1] * xyhabc[0];
+	xyhabc[5] = cyl->aa_length * dotp(oc, oc) - xyhabc[1] * xyhabc[1]
 		- cyl->radius2 * cyl->aa_length;
-	xyhabc[2] = xyhabc[4] * xyhabc[4] - xyhabc[3] * xyhabc[5]; //h
+	xyhabc[2] = xyhabc[4] * xyhabc[4] - xyhabc[3] * xyhabc[5];
 	return (xyhabc[2]);
 }
 
-void	cyl_hit(const void *cyl, const t_ray *r, struct s_hit *h, const uint32_t res)
+void			cyl_hit(const void *cyl, const t_ray *r, struct s_hit *h,
+		const uint32_t res)
 {
 	const t_cyl	*cy = (t_cyl*)cyl;
 	float		xyhabc[6];
 	float		ty[2];
-	
-	if (setXyabc(cy, r, xyhabc) < 0.0f)
+
+	if (setxyabc(cy, r, xyhabc) < 0.0f)
 		return ;
 	xyhabc[2] = sqrtf(xyhabc[2]);
-	ty[0] = (-xyhabc[4] - xyhabc[2]) / xyhabc[3]; //t
-	ty[1] = xyhabc[1] + ty[0] * xyhabc[0];			// y
+	ty[0] = (-xyhabc[4] - xyhabc[2]) / xyhabc[3];
+	ty[1] = xyhabc[1] + ty[0] * xyhabc[0];
 	if (ty[1] > 0 && ty[1] < cy->aa_length && ty[0] < h->t && ty[0] > h->min)
 	{
 		h->t = ty[0];
@@ -66,43 +67,44 @@ void	cyl_hit(const void *cyl, const t_ray *r, struct s_hit *h, const uint32_t re
 		return ;
 	}
 	ty[0] = (cy->aa_length * (ty[1] >= 0) - xyhabc[1]) / xyhabc[0];
-	if (fabs(xyhabc[4] + xyhabc[3] * ty[0]) < xyhabc[2] && ty[0] < h->t && ty[0] > h->min)
+	if (fabs(xyhabc[4] + xyhabc[3] * ty[0]) < xyhabc[2] && ty[0] < h->t &&
+			ty[0] > h->min)
 	{
 		h->t = ty[0];
 		h->p = res;
 	}
 }
 
-uint8_t	cyl_bounding(const void *cyl, t_box *bbox)
+uint8_t			cyl_bounding(const void *cyl, t_box *bbox)
 {
-	const t_cyl *const cy = (t_cyl *)cyl;
-	t_vec3f e;
-	t_vec3f t1;
-	t_vec3f	t2;
+	const t_cyl *const	cy = (t_cyl *)cyl;
+	t_vec3f				e;
+	t_vec3f				t1;
+	t_vec3f				t2;
 
 	mult_(cy->aa, cy->aa, e);
-	s_scale(e, 1/ cy->aa_length, e);
+	s_scale(e, 1.f / cy->aa_length, e);
 	sub_((t_vec3f){1, 1, 1}, e, e);
 	set_vector(e, sqrtf(e[0]), sqrtf(e[1]), sqrtf(e[2]));
 	s_scale(e, cy->radius, e);
 	add_(cy->pa, e, t1);
 	add_(cy->pb, e, t2);
-	set_vector(bbox->max, fmaxf(t1[0], t2[0]),fmaxf(t1[1], t2[1]),
+	set_vector(bbox->max, fmaxf(t1[0], t2[0]), fmaxf(t1[1], t2[1]),
 			fmaxf(t1[2], t2[2]));
 	sub_(cy->pa, e, t1);
 	sub_(cy->pb, e, t2);
-	set_vector(bbox->min, fminf(t1[0], t2[0]),fminf(t1[1], t2[1]),
+	set_vector(bbox->min, fminf(t1[0], t2[0]), fminf(t1[1], t2[1]),
 			fminf(t1[2], t2[2]));
 	sub_(bbox->max, bbox->min, bbox->extent);
 	return (1);
 }
 
-
-uint8_t	cyl_parser(struct s_preScene *ps, const char *s, uint32_t *pos_num)
+uint8_t			cyl_parser(struct s_prescene *ps, const char *s,
+		uint32_t *pos_num)
 {
-	t_cyl *cyl;
-	t_vec3f center_o[2];
-	
+	t_cyl	*cyl;
+	t_vec3f	center_o[2];
+
 	cyl = (t_cyl*)(ps->prmtvs_data + *pos_num);
 	ps->prmtvs.prmtvs[pos_num[1]].prmtv = cyl;
 	ps->prmtvs.prmtvs[pos_num[1]].mtrl = ps->mtrls_data + pos_num[1];

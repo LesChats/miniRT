@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   skybox.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/30 22:54:20 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/17 20:41:11 by abaudot          ###   ########.fr       */
+/*   Created: 2021/04/20 20:02:49 by abaudot           #+#    #+#             */
+/*   Updated: 2021/04/21 12:36:08 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,7 @@
 #include "tracer.h"
 #include "mlx_int.h"
 
-//remove this
-/*
-void		setSkybox(struct s_skybox *sky,  char *filename, void *mlx)
-{
-	const uint32_t	n = ft_strlen(filename);
-	char relativePath[1024];
-
-	if (n > 1015 || open(filename, O_DIRECTORY) < 0)
-		return (return_messageOnly("skybox path is to long"));		
-	ft_memcpy(relativePath, filename, n);
-	ft_memcpy(relativePath + n, "posx.xpm", 9);
-	sky->skyImg[0] = mlx_xpm_file_to_image(mlx, relativePath,
-		   	&sky->widthU, &sky->heightV);
-	ft_memcpy(relativePath + n, "negx.xpm", 9);
-	sky->skyImg[1] = mlx_xpm_file_to_image(mlx, relativePath,
-		   	&sky->widthU, &sky->heightV);
-	ft_memcpy(relativePath + n, "posy.xpm", 9);
-	sky->skyImg[2] = mlx_xpm_file_to_image(mlx, relativePath,
-		   	&sky->widthU, &sky->heightV);
-	ft_memcpy(relativePath + n, "negy.xpm", 9);
-	sky->skyImg[3] = mlx_xpm_file_to_image(mlx, relativePath,
-		   	&sky->widthU, &sky->heightV);
-	ft_memcpy(relativePath + n, "posz.xpm", 9);
-	sky->skyImg[4] = mlx_xpm_file_to_image(mlx, relativePath,
-		   	&sky->widthU, &sky->heightV);
-	ft_memcpy(relativePath + n, "negz.xpm", 9);
-	sky->skyImg[5] = mlx_xpm_file_to_image(mlx, relativePath,
-		   	&sky->widthU, &sky->heightV);
-}
-*/
-void	setColorFromInt(int32_t	c, t_vec3f color) 
+void			setcolorfromint(int32_t c, t_vec3f color)
 {
 	color[0] = (float)((c & 0x00FF0000) >> 16);
 	color[1] = (float)((c & 0x0000FF00) >> 8);
@@ -52,20 +22,20 @@ void	setColorFromInt(int32_t	c, t_vec3f color)
 	s_scale(color, COLOR_INV, color);
 }
 
-static uint32_t	getMaxIndice(const t_vec3f r, float *u, float *v)
+static uint32_t	getmaxindice(const t_vec3f r, float *u, float *v)
 {
-	const float	absX = fabs(r[0]);
-	const float	absY = fabs(r[1]);
-	const float	absZ = fabs(r[2]);
+	const float	absx = fabs(r[0]);
+	const float	absy = fabs(r[1]);
+	const float	absz = fabs(r[2]);
 
-	if (absX >= absY && absX >= absZ)
+	if (absx >= absy && absx >= absz)
 	{
 		*u = 1.f - (r[2] / r[0] + 1.f) * 0.5f;
 		*v = (1.f - (r[1] / r[0] + 1.f) * 0.5f) *
-			(-1 + 2 * (r[0] > 0)) + (r[0] < 0);;
+			(-1 + 2 * (r[0] > 0)) + (r[0] < 0);
 		return (0 + (r[0] < 0.f));
 	}
-	if (absY >= absX && absY >= absZ)
+	if (absy >= absx && absy >= absz)
 	{
 		*u = ((r[0] / r[1] + 1.f) * 0.5f) * (-1 + 2 * (r[1] > 0)) + (r[1] < 0);
 		*v = ((r[2] / r[1] + 1.f) * 0.5f);
@@ -77,26 +47,24 @@ static uint32_t	getMaxIndice(const t_vec3f r, float *u, float *v)
 	return (4 + (r[2] < 0.f));
 }
 
-static void	getSkyboxTexture(const t_vec3f ray, t_vec3f color,
+static void		getskyboxtexture(const t_vec3f ray, t_vec3f color,
 		const struct s_skybox *sky)
 {
-	float u;
-	float v;
-	uint32_t index;
-	
-	index = getMaxIndice(ray, &u, &v);
-	
-	u *= (sky->widthU - 1);
-	v *= (sky->heightV - 1);
-	//wrong * sky->Wi insted
-	setColorFromInt(((int *)sky->skybox[index])[(int)v * sky->heightV +
+	float		u;
+	float		v;
+	uint32_t	index;
+
+	index = getmaxindice(ray, &u, &v);
+	u *= (sky->widthu - 1);
+	v *= (sky->heightv - 1);
+	setcolorfromint(((int *)sky->skybox[index])[(int)v * sky->widthu +
 			(int)u], color);
 }
 
-void	getBackGround(const struct s_skybox *sky, const t_vec3f ray,
-	   	t_vec3f color)
+void			getbackground(const struct s_skybox *sky, const t_vec3f ray,
+		t_vec3f color)
 {
 	if (*sky->skybox == NULL)
 		return (set_vector(color, 0.f, 0.f, 0.f));
-	return (getSkyboxTexture(ray, color, sky));
+	return (getskyboxtexture(ray, color, sky));
 }

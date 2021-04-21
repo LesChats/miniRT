@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   constructor.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aime <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/11 16:56:56 by aime              #+#    #+#             */
-/*   Updated: 2021/04/19 11:40:29 by abaudot          ###   ########.fr       */
+/*   Created: 2021/04/21 12:48:06 by abaudot           #+#    #+#             */
+/*   Updated: 2021/04/21 12:48:10 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 #include "bvh.h"
 #include "stdlib.h"
 
-#include <stdio.h>
-static uint8_t	resize_nodes(t_node **node, const uint32_t node_count)
+static uint8_t		resize_nodes(t_node **node, const uint32_t node_count)
 {
 	uint32_t		i;
 	t_node *const	tmp = *node;
@@ -28,7 +27,6 @@ static uint8_t	resize_nodes(t_node **node, const uint32_t node_count)
 	i = 0;
 	while (i < node_count)
 	{
-//		printf("node cnt/start/off %d/%d/%d\n", tmp[i].prmtv_cnt,tmp[i].start,tmp[i].offset);
 		(*node)[i] = tmp[i];
 		++i;
 	}
@@ -36,16 +34,15 @@ static uint8_t	resize_nodes(t_node **node, const uint32_t node_count)
 	return (1);
 }
 
-static inline void swapp(t_prmtv *a, t_prmtv *b)
+static inline void	swapp(t_prmtv *a, t_prmtv *b)
 {
-//	printf("coucou ici on swap\n");
 	const t_prmtv tmp = *a;
 
 	*a = *b;
 	*b = tmp;
 }
 
-static inline void converter(const t_prmtv *p, t_box *bbox)
+static inline void	converter(const t_prmtv *p, t_box *bbox)
 {
 	static const t_bounder bounder[] = 
 	{
@@ -56,11 +53,12 @@ static inline void converter(const t_prmtv *p, t_box *bbox)
 		trgl_bounding,
 		cps_bounding
 	};
+
 	bounder[p->type](p->prmtv, bbox);
 };
 
-static inline void set_node(t_node *node, const t_prmtv *p,
-		struct s_buildStak *todo, t_box *bc)
+static inline void	set_node(t_node *node, const t_prmtv *p,
+		struct s_buildstak *todo, t_box *bc)
 {
 	t_box			bb;
 	t_box			tmp_box;
@@ -72,26 +70,26 @@ static inline void set_node(t_node *node, const t_prmtv *p,
 	node->prmtv_cnt = end - node->start;
 	node->offset = UNTOUCH;
 	converter((p + node->start), &bb);
-	getCenter(&bb, tmp);
+	getcenter(&bb, tmp);
 	equal_(bc->min, tmp);
 	equal_(bc->max, tmp);
 	i = node->start + 1;
 	while (i < end)
 	{
 		converter((p + i++), &tmp_box);
-		expandToInclude(&tmp_box, &bb);
-		getCenter(&bb, tmp);
-		expandToInclude_vec(tmp, bc);
+		expandtoinclude(&tmp_box, &bb);
+		getcenter(&bb, tmp);
+		expandtoinclude_vec(tmp, bc);
 	}
 	node->bbox = bb;
 	if (node->prmtv_cnt < LEAF)
 		node->offset = 0;
 }
 
-static inline void add_totodo(t_prmtv *pv, struct s_buildStak *todo,
+static inline void	add_totodo(t_prmtv *pv, struct s_buildstak *todo,
 		t_box *bc, const uint32_t count)
 {
-	const uint32_t	split_dim = maxDimension(bc);
+	const uint32_t	split_dim = maxdimension(bc);
 	const uint32_t	end = todo->stack[todo->ptr].end;
 	const float		split = .5f * (bc->min[split_dim] + bc->max[split_dim]);
 	uint32_t		mid;
@@ -102,7 +100,7 @@ static inline void add_totodo(t_prmtv *pv, struct s_buildStak *todo,
 	while (start < end)
 	{
 		converter((pv + start), bc);
-		getCenter(bc, bc->min);
+		getcenter(bc, bc->min);
 		if (bc->min[split_dim] < split)
 			swapp(pv + start, pv + mid++);
 		++start;
@@ -110,20 +108,19 @@ static inline void add_totodo(t_prmtv *pv, struct s_buildStak *todo,
 	start = todo->stack[todo->ptr].start;
 	if (mid == start || mid == end)
 		mid = start + (end - start) / 2;
-//	printf("start/mid/end %d/%d/%d\n", start, mid, end);
-	todo->stack[todo->ptr++] = (struct s_buildEntry){count - 1, mid, end};
-	todo->stack[todo->ptr++] = (struct s_buildEntry){count - 1, start, mid};
+	todo->stack[todo->ptr++] = (struct s_buildentry){count - 1, mid, end};
+	todo->stack[todo->ptr++] = (struct s_buildentry){count - 1, start, mid};
 }
 
-uint8_t builder(struct s_bvh *bvh)
+uint8_t				builder(struct s_bvh *bvh)
 {
-	struct s_buildStak	todo;
+	struct s_buildstak	todo;
 	t_box				bc;
 	uint32_t			node_count;
 
 	if (!(bvh->nodes = malloc(sizeof(t_node) * (bvh->prmtvs.size * 2))))
 		return (0);
-	todo.stack[0] = (struct s_buildEntry){0xfffffffc, 0, bvh->prmtvs.size};
+	todo.stack[0] = (struct s_buildentry){0xfffffffc, 0, bvh->prmtvs.size};
 	todo.ptr = 1;
 	node_count = 0;
 	while (todo.ptr > 0)

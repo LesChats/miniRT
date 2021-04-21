@@ -6,16 +6,14 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/14 11:30:54 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/19 20:19:47 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/04/21 12:59:29 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vectors.h"
 #include "bvh.h"
-#include <stdio.h>
 
-
-static inline void swap32(void *a, void *b)
+static inline void		swap32(void *a, void *b)
 {
 	uint32_t tmp;
 
@@ -24,8 +22,8 @@ static inline void swap32(void *a, void *b)
 	*(uint32_t*)b = tmp;
 }
 
-static uint8_t intersect(const t_ray *ray, const t_box *bbox,
-	   	float *near, float *far)
+static uint8_t			inter(const t_ray *ray, const t_box *bbox,
+		float *near, float *far)
 {
 	float ttmm[4];
 
@@ -52,43 +50,42 @@ static uint8_t intersect(const t_ray *ray, const t_box *bbox,
 	return (1);
 }
 
-static inline void function_02(const struct s_node *nodes,
-	   	const t_ray *r, struct s_travArray *td, const int32_t ni)
+static inline void		function_02(const struct s_node *n,
+		const t_ray *r, struct s_travarray *td, const int32_t ni)
 {
-	float bbhits[4];
-	int32_t closer_other[2];
-	const uint8_t	ht0 = intersect(r, &nodes[ni + 1].bbox, bbhits, bbhits + 1);
-	const uint8_t	ht1 = intersect(r, &nodes[ni + nodes[ni].offset].bbox,
-			bbhits + 2, bbhits + 3);
-	
+	float			bh[4];
+	const uint8_t	ht0 = inter(r, &n[ni + 1].bbox, bh, bh + 1);
+	const uint8_t	ht1 = inter(r, &n[ni + n[ni].offset].bbox, bh + 2, bh + 3);
+	int32_t			closer_other[2];
+
 	if (ht0 && ht1)
 	{
 		closer_other[0] = ni + 1;
-		closer_other[1] = ni + nodes[ni].offset;
-		if (bbhits[2] < bbhits[0])
+		closer_other[1] = ni + n[ni].offset;
+		if (bh[2] < bh[0])
 		{
-			swap32(bbhits, bbhits + 2);
-			swap32(bbhits + 1, bbhits + 3);
+			swap32(bh, bh + 2);
+			swap32(bh + 1, bh + 3);
 			swap32(closer_other, closer_other + 1);
 		}
-		td->arr[++td->stkptr] = (t_traversal){closer_other[1], bbhits[2]};
-		td->arr[++td->stkptr] = (t_traversal){closer_other[0], bbhits[0]};
+		td->arr[++td->stkptr] = (t_traversal){closer_other[1], bh[2]};
+		td->arr[++td->stkptr] = (t_traversal){closer_other[0], bh[0]};
 	}
 	else if (ht0)
-		td->arr[++td->stkptr] = (t_traversal){ni + 1, bbhits[0]};
+		td->arr[++td->stkptr] = (t_traversal){ni + 1, bh[0]};
 	else if (ht1)
-		td->arr[++td->stkptr] = (t_traversal){ni + nodes[ni].offset, bbhits[2]};
+		td->arr[++td->stkptr] = (t_traversal){ni + n[ni].offset, bh[2]};
 }
 
-static uint8_t function_01(const t_prmtv *prmtvs, const t_ray * r,
+static uint8_t			function_01(const t_prmtv *prmtvs, const t_ray *r,
 		struct s_hit *h, const t_node *n)
 {
-	static const t_collider hits_func[] = {sphr_hit, pln_hit, sqr_hit,
+	static const t_collider	hits_func[] = {sphr_hit, pln_hit, sqr_hit,
 		cyl_hit, trgl_hit, cps_hit};
-	const uint32_t start = n->start;
-	const uint32_t end = n->prmtv_cnt;
-	struct s_hit tmp_h;
-	uint32_t o;
+	const uint32_t			start = n->start;
+	const uint32_t			end = n->prmtv_cnt;
+	struct s_hit			tmp_h;
+	uint32_t				o;
 
 	tmp_h = *h;
 	o = 0;
@@ -106,10 +103,10 @@ static uint8_t function_01(const t_prmtv *prmtvs, const t_ray * r,
 	return (0);
 }
 
-uint8_t	traverser(const struct s_bvh *bvh, const t_ray *r,
+uint8_t					traverser(const struct s_bvh *bvh, const t_ray *r,
 		struct s_hit *h, uint8_t shad)
 {
-	struct s_travArray todo;
+	struct s_travarray	todo;
 	int32_t				ni;
 	float				near;
 
@@ -119,14 +116,9 @@ uint8_t	traverser(const struct s_bvh *bvh, const t_ray *r,
 	while (todo.stkptr >= 0)
 	{
 		ni = todo.arr[todo.stkptr].i;
-		//printf("start ni = %d\n", ni);
 		near = todo.arr[todo.stkptr--].mint;
 		if (near > h->t)
 			continue ;
-		/*
-		if (bvh->nodes[ni].offset == 0)
-			function_01(bvh->prmtvs.prmtvs, r, h, bvh->nodes + ni);
-		*/
 		if (bvh->nodes[ni].offset == 0)
 		{
 			if (function_01(bvh->prmtvs.prmtvs, r, h, bvh->nodes + ni) && shad)

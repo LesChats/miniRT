@@ -1,7 +1,7 @@
 INCLUDES += includes/bvh.h
-INCLUDES += includes/mlx.h
-INCLUDES += includes/mlxHandler.h
-INCLUDES += includes/mlx_int.h
+INCLUDES += mlx_linux/mlx.h
+INCLUDES += includes/mlxhandler.h
+INCLUDES += mlx_linux/mlx_int.h
 INCLUDES += includes/parser.h
 INCLUDES += includes/struct.h
 INCLUDES += includes/tracer.h

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   strings_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/31 15:41:37 by abaudot           #+#    #+#             */
-/*   Updated: 2021/03/31 16:10:55 by abaudot          ###   ########.fr       */
+/*   Created: 2021/04/21 12:01:09 by abaudot           #+#    #+#             */
+/*   Updated: 2021/04/21 12:01:10 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdint.h>
 
-uint32_t ft_strlen(const char *s)
+uint32_t	ft_strlen(const char *s)
 {
 	uint32_t i;
 
@@ -21,5 +21,3 @@ uint32_t ft_strlen(const char *s)
 		++i;
 	return (i);
 }
-
-uint32_t ft_strcmp(const char *a, const char *b);

@@ -1,41 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   finalScene.c                                       :+:      :+:    :+:   */
+/*   final_scene.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/17 14:00:04 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/19 10:20:28 by abaudot          ###   ########.fr       */
+/*   Created: 2021/04/20 20:14:41 by abaudot           #+#    #+#             */
+/*   Updated: 2021/04/21 13:42:27 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "bvh.h"
 
-static void destroy_preSene(struct s_preScene *ps)
+static void		destroy_presene(struct s_prescene *ps)
 {
 	free(ps->tracker.s);
 	free(ps->prmtvs_data);
 	free(ps->mtrls_data);
 }
 
-static uint8_t reOrder_data(struct s_scene *s, t_prmtv *p,
+static uint8_t	reorder_data(struct s_scene *s, t_prmtv *p,
 		const uint32_t n)
 {
-	const uint32_t size_arr[] = {sizeof(t_sphr), sizeof(t_pln),
+	const uint32_t	size_arr[] = {sizeof(t_sphr), sizeof(t_pln),
 		sizeof(t_sqr), sizeof(t_cyl), sizeof(t_trgl), sizeof(t_cps)};
-	const uint32_t size = s->render.bvh.prmtvs.size;
-	uint32_t i;
-	uint32_t pos;
+	const uint32_t	size = s->render.bvh.prmtvs.size;
+	uint32_t		i;
+	uint32_t		pos;
 
 	if (!(s->prmtvs = malloc(n)))
 		return (return_message("Fail to allocated memorie for prmtvs"));
 	if (!(s->mtrls = (t_material*)malloc(sizeof(t_material) * size)))
-	   return (return_message("Fail to allocated memorie for mtrls"));
+		return (return_message("Fail to allocated memorie for mtrls"));
 	i = 0;
 	pos = 0;
-//	printf("Rendering %d primitives...\n", size);
 	while (i < size)
 	{
 		s->mtrls[i] = *(p[i].mtrl);
@@ -48,7 +47,7 @@ static uint8_t reOrder_data(struct s_scene *s, t_prmtv *p,
 	return (1);
 }
 
-uint8_t	finalScene(struct s_preScene *ps, struct s_scene *const scene)
+uint8_t			finalscene(struct s_prescene *ps, struct s_scene *const scene)
 {
 	scene->cams = ps->cams;
 	scene->rsltn[0] = ps->rsltn[0];
@@ -56,13 +55,12 @@ uint8_t	finalScene(struct s_preScene *ps, struct s_scene *const scene)
 	*scene->render.sky.skybox = 0;
 	scene->render.lghts = ps->lghts;
 	scene->count = ps->prmtvs.size;
-//	printf("light num: %d\n", scene->render.lghts.count);
 	scene->render.bvh.prmtvs = ps->prmtvs;
 	if (!(builder(&scene->render.bvh)))
 		return (return_message("Fail to counstruct the BVH !"));
-	if (!(reOrder_data(scene, scene->render.bvh.prmtvs.prmtvs,
-				   	ps->total_size)))
+	if (!(reorder_data(scene, scene->render.bvh.prmtvs.prmtvs,
+					ps->total_size)))
 		return (return_message("Fail to reorder the data || finalScene.c"));
-	destroy_preSene(ps);
+	destroy_presene(ps);
 	return (1);
 }

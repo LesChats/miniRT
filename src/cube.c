@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   cube.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/20 13:09:56 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/20 13:58:38 by abaudot          ###   ########.fr       */
+/*   Created: 2021/04/21 10:02:55 by abaudot           #+#    #+#             */
+/*   Updated: 2021/04/21 13:40:41 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-#include "vectors.h" 
+#include "vectors.h"
 
-static void parse_sqr(t_sqr *s, const float hgth, const uint32_t i)
+static void	parse_sqr(t_sqr *s, const float hgth, const uint32_t i)
 {
-	static const t_vec3f nor[3] =
-		{{1.f, 0.f, 0.f}, {0.f, 1.f, 0.f}, {0.f, 0.f, 1.f}};
-	const float size = hgth * (1.f - 2.f * (i % 2));
-	t_vec3f	pos;
-	t_vec3f larg;
+	static const t_vec3f	nor[3] = {{1.f, 0.f, 0.f},
+		{0.f, 1.f, 0.f}, {0.f, 0.f, 1.f}};
+	const float				size = hgth * (1.f - 2.f * (i % 2));
+	t_vec3f					pos;
+	t_vec3f					larg;
 
 	equal_(s->n, nor[i % 3]);
 	s_scale(s->n, size * INVSQ2, pos);
@@ -32,7 +32,7 @@ static void parse_sqr(t_sqr *s, const float hgth, const uint32_t i)
 	sub_(s->pts, pos, s->min);
 }
 
-static void	set_sqr(struct s_preScene *ps, uint32_t *pos_num, t_material *m,
+static void	set_sqr(struct s_prescene *ps, uint32_t *pos_num, t_material *m,
 		t_sqr *sqr)
 {
 	ps->prmtvs.prmtvs[pos_num[1]].prmtv = sqr;
@@ -43,19 +43,19 @@ static void	set_sqr(struct s_preScene *ps, uint32_t *pos_num, t_material *m,
 	*pos_num += sizeof(t_sqr);
 }
 
-uint8_t	cub_parser(struct s_preScene *ps, const char *s, uint32_t *pos_num)
+uint8_t		cub_parser(struct s_prescene *ps, const char *s, uint32_t *pos_num)
 {
-	t_sqr	*sqr;
-	t_material *mat;
+	t_sqr		*sqr;
+	t_material	*mat;
 	float		hgth;
 	t_vec3f		center;
 	uint32_t	i;
-	
+
 	if (!(vect_parse(center, &s)))
 		return (return_message("bad vector for cube center"));
 	hgth = ft_atof(&s);
 	mat = ps->mtrls_data + pos_num[1];
-	if (!parse_mat(mat,  &s, ps->mlx))
+	if (!parse_mat(mat, &s, ps->mlx))
 		return (return_message("bad material for cube"));
 	i = 0;
 	while (i < 6)

@@ -5,22 +5,22 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/13 14:13:25 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/19 12:18:03 by abaudot          ###   ########.fr       */
+/*   Created: 2021/04/21 10:45:03 by abaudot           #+#    #+#             */
+/*   Updated: 2021/04/21 12:03:24 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "bvh.h"
 
-void	sqr_nrml(const void *const sqr, t_hInfo *hi)
+void		sqr_nrml(const void *const sqr, t_hinfo *hi)
 {
-	t_sqr *s = (t_sqr*)sqr;
+	const t_sqr *s = (t_sqr*)sqr;
 
 	equal_(hi->n, s->n);
 }
 
-void	sqr_hit(const void *sqr, const t_ray *r, struct s_hit *h,
+void		sqr_hit(const void *sqr, const t_ray *r, struct s_hit *h,
 		const uint32_t res)
 {
 	const t_sqr		*sq = (t_sqr*)sqr;
@@ -28,7 +28,6 @@ void	sqr_hit(const void *sqr, const t_ray *r, struct s_hit *h,
 	t_vec3f			tmp;
 	t_vec3f			hit;
 
-//	printf("%.2f\n", deno);
 	if (deno == 0)
 		return ;
 	sub_(sq->pts, r->o, tmp);
@@ -46,7 +45,7 @@ void	sqr_hit(const void *sqr, const t_ray *r, struct s_hit *h,
 	}
 }
 
-uint8_t	sqr_bounding(const void *sqr, t_box *bbox)
+uint8_t		sqr_bounding(const void *sqr, t_box *bbox)
 {
 	const t_sqr *const s = (t_sqr *)sqr;
 
@@ -56,7 +55,7 @@ uint8_t	sqr_bounding(const void *sqr, t_box *bbox)
 	return (1);
 }
 
-static void	getSqr_box(t_sqr *sqr, float cir)
+static void	getsqr_box(t_sqr *sqr, float cir)
 {
 	t_vec3f uv[2];
 	t_vec3f large;
@@ -66,23 +65,23 @@ static void	getSqr_box(t_sqr *sqr, float cir)
 	else
 		crossp(sqr->n, (t_vec3f){0, 1, 0}, uv[0]);
 	normalize(uv[0]);
-	crossp(sqr->n, uv[0] , uv[1]);
+	crossp(sqr->n, uv[0], uv[1]);
 	normalize(uv[1]);
 	set_vector(uv[0], fabs(uv[0][0]), fabs(uv[0][1]), fabs(uv[0][2]));
 	set_vector(uv[1], fabs(uv[1][0]), fabs(uv[1][1]), fabs(uv[1][2]));
 	set_vector(large, fabs(sqr->n[0]) * 0.001, fabs(sqr->n[1]) * 0.001,
 			fabs(sqr->n[2]) * 0.001);
-	add_(uv[1] , uv[0], uv[0]);
+	add_(uv[1], uv[0], uv[0]);
 	s_scale(uv[0], cir, uv[0]);
 	add_(uv[0], large, uv[0]);
 	add_(sqr->pts, uv[0], sqr->max);
 	sub_(sqr->pts, uv[0], sqr->min);
 }
 
-uint8_t	sqr_parser(struct s_preScene *ps, const char *s, uint32_t *pos_num)
+uint8_t		sqr_parser(struct s_prescene *ps, const char *s, uint32_t *pos_num)
 {
 	t_sqr *sqr;
-	
+
 	sqr = (t_sqr*)(ps->prmtvs_data + *pos_num);
 	ps->prmtvs.prmtvs[pos_num[1]].prmtv = sqr;
 	ps->prmtvs.prmtvs[pos_num[1]].mtrl = ps->mtrls_data + pos_num[1];
@@ -92,8 +91,8 @@ uint8_t	sqr_parser(struct s_preScene *ps, const char *s, uint32_t *pos_num)
 	if (!(vect_parse(sqr->n, &s)))
 		return (return_message("bad vector for square normal"));
 	normalize(sqr->n);
-	getSqr_box(sqr, ft_atof(&s) / sqrtf(2));
-	if (!parse_mat(ps->mtrls_data + pos_num[1],  &s, ps->mlx))
+	getsqr_box(sqr, ft_atof(&s) / sqrtf(2));
+	if (!parse_mat(ps->mtrls_data + pos_num[1], &s, ps->mlx))
 		return (return_message("bad material for square"));
 	++pos_num[1];
 	*pos_num += sizeof(t_sqr);

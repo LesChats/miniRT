@@ -6,13 +6,13 @@
 /*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 16:07:46 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/19 21:42:16 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/04/21 11:55:56 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-static uint8_t	writeHeader(const struct s_scene *s, const int fd)
+static uint8_t	writeheader(const struct s_scene *s, const int fd)
 {
 	static uint8_t header[54];
 
@@ -31,7 +31,8 @@ static uint8_t	writeHeader(const struct s_scene *s, const int fd)
 	return (write(fd, header, 54) + 1);
 }
 
-static uint8_t writeImage(const struct s_scene *s, const t_cam *cam, const int fd)
+static uint8_t	writeimage(const struct s_scene *s, const t_cam *cam,
+		const int fd)
 {
 	const uint32_t	size = s->rsltn[0] * s->rsltn[1];
 	uint32_t		*image;
@@ -46,8 +47,8 @@ static uint8_t writeImage(const struct s_scene *s, const t_cam *cam, const int f
 		j = 0;
 		while (j < s->rsltn[0])
 		{
-			image[i * s->rsltn[0] +  j] = cam->addr[((s->rsltn[1] - 1) - i)
-			   	* s->rsltn[0] + j];
+			image[i * s->rsltn[0] + j] = cam->addr[((s->rsltn[1] - 1) - i)
+				* s->rsltn[0] + j];
 			++j;
 		}
 		--i;
@@ -58,12 +59,12 @@ static uint8_t writeImage(const struct s_scene *s, const t_cam *cam, const int f
 	return (1);
 }
 
-uint8_t	sceneToBmp(const struct s_scene *s, const t_cam * cam)
+uint8_t			scenetobmp(const struct s_scene *s, const t_cam *cam)
 {
 	int				fd;
 	static uint8_t	num = '0';
 	char			name[20];
-	
+
 	printf("Converting scene to bmp...\n");
 	ft_memcpy(name, "images/output_", 14);
 	ft_memcpy(name + 14, &num, 1);
@@ -71,10 +72,10 @@ uint8_t	sceneToBmp(const struct s_scene *s, const t_cam * cam)
 	name[19] = 0;
 	++num;
 	if ((fd = open(name,
-				   	O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR)) < 1)
+					O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR)) < 1)
 		return (0);
-	if (!writeHeader(s, fd))
-		return(return_message("writing the header --bmp_save.c"));
+	if (!writeheader(s, fd))
+		return (return_message("writing the header --bmp_save.c"));
 	printf("image was save as:\t%s\n", name);
-	return (writeImage(s, cam, fd));
+	return (writeimage(s, cam, fd));
 }

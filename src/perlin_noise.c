@@ -1,16 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   testnorminette.c                                   :+:      :+:    :+:   */
+/*   perlin_noise.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/03 13:43:52 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/03 14:05:54 by abaudot          ###   ########.fr       */
+/*   Created: 2021/04/02 13:56:01 by abaudot           #+#    #+#             */
+/*   Updated: 2021/04/21 11:52:49 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-static const unsigned int	g_perm[] = {
+#include "tracer.h"
+
+static const uint32_t	g_perm[] = {
 	182, 232, 51, 15, 55, 119, 7, 107, 230, 227, 6, 34, 216, 61, 183, 36,
 	40, 134, 74, 45, 157, 78, 81, 114, 145, 9, 209, 189, 147, 58, 126, 0,
 	240, 169, 228, 235, 67, 198, 72, 64, 88, 98, 129, 194, 99, 71, 30, 127,
@@ -44,3 +46,71 @@ static const unsigned int	g_perm[] = {
 	37, 245, 8, 4, 22, 82, 110, 180, 184, 12, 25, 5, 193, 41, 85, 177, 192,
 	253, 79, 29, 115, 103, 142, 146, 52, 48, 89, 54, 121, 212, 122, 60, 28, 42
 };
+
+static float			fastfloor(float x)
+{
+	return ((int32_t)x - 1 * (x <= 0));
+}
+
+static float			c(float *xyz, const int32_t a)
+{
+	static const float	grad3[][3] = {
+	{1, 1, 0}, {-1, 1, 0}, {1, -1, 0}, {-1, -1, 0},
+	{1, 0, 1}, {-1, 0, 1}, {1, 0, -1}, {-1, 0, -1},
+	{0, 1, 1}, {0, -1, 1}, {0, 1, -1}, {0, -1, -1}};
+	float				t;
+
+	t = 0.5 - xyz[0] * xyz[0] - xyz[1] * xyz[1] - xyz[2] * xyz[2];
+	if (t < 0)
+		return (0.f);
+	t *= t;
+	return (t * t * dotp(grad3[a], xyz));
+}
+
+static float			noise_suite(float *tmp, float *ijk, float *xyz)
+{
+	int32_t	abc[3];
+	int32_t	gi[4];
+
+	abc[0] = (int32_t)ijk[0] & 255;
+	abc[1] = (int32_t)ijk[1] & 255;
+	abc[2] = (int32_t)ijk[2] & 255;
+	gi[0] = g_perm[abc[0] + g_perm[abc[1] + g_perm[abc[2]]]] % 12;
+	gi[1] = g_perm[abc[0] + (xyz[0] >= xyz[1] && xyz[0] >= xyz[2]) + g_perm[
+		abc[1] + (xyz[1] >= xyz[0] && xyz[1] >= xyz[2]) + g_perm[
+		abc[2] + (xyz[2] >= xyz[0] && xyz[2] >= xyz[1])]]] % 12;
+	gi[2] = g_perm[abc[0] + (xyz[0] >= xyz[1] || xyz[0] >= xyz[2]) + g_perm[
+		abc[1] + (xyz[1] >= xyz[0] || xyz[1] >= xyz[2]) + g_perm[
+		abc[2] + (xyz[2] >= xyz[0] || xyz[2] >= xyz[1])]]] % 12;
+	gi[3] = g_perm[abc[0] + 1 + g_perm[abc[1] + 1 + g_perm[abc[2] + 1]]] % 12;
+	return ((c(tmp, gi[1]) + c(tmp + 3, gi[2]) + c(tmp + 6, gi[3])
+		+ c(xyz, gi[0])) * 32.f);
+}
+
+float					noise(t_vec3f in)
+{
+	const float	g3 = 1.f / 6.f;
+	float		tmp[9];
+	float		ijk[4];
+	t_vec3f		xyz;
+
+	ijk[3] = (in[0] + in[1] + in[2]) / 3.f;
+	ijk[0] = fastfloor(in[0] + ijk[3]);
+	ijk[1] = fastfloor(in[1] + ijk[3]);
+	ijk[2] = fastfloor(in[2] + ijk[3]);
+	ijk[3] = (ijk[0] + ijk[1] + ijk[2]) * g3;
+	xyz[0] = ijk[0] - ijk[3];
+	xyz[1] = ijk[1] - ijk[3];
+	xyz[2] = ijk[2] - ijk[3];
+	sub_(in, xyz, xyz);
+	tmp[0] = xyz[0] - (xyz[0] >= xyz[1] && xyz[0] >= xyz[2]) + g3;
+	tmp[1] = xyz[1] - (xyz[1] >= xyz[0] && xyz[1] >= xyz[2]) + g3;
+	tmp[2] = xyz[2] - (xyz[2] >= xyz[0] && xyz[2] >= xyz[1]) + g3;
+	tmp[3] = xyz[0] - (xyz[0] >= xyz[1] || xyz[0] >= xyz[2]) + 2 * g3;
+	tmp[4] = xyz[1] - (xyz[1] >= xyz[0] || xyz[1] >= xyz[2]) + 2 * g3;
+	tmp[5] = xyz[2] - (xyz[2] >= xyz[0] || xyz[2] >= xyz[1]) + 2 * g3;
+	tmp[6] = xyz[0] - 1.0 + 3.0 * g3;
+	tmp[7] = xyz[1] - 1.0 + 3.0 * g3;
+	tmp[8] = xyz[2] - 1.0 + 3.0 * g3;
+	return (noise_suite(tmp, ijk, xyz));
+}

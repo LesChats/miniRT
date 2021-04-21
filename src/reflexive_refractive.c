@@ -1,30 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mlxHandler.h                                       :+:      :+:    :+:   */
+/*   reflexive_refractive.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/29 18:21:49 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/20 15:26:55 by abaudot          ###   ########.fr       */
+/*   Created: 2021/03/26 12:16:24 by abaudot           #+#    #+#             */
+/*   Updated: 2021/04/21 12:05:37 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MLXHANDLER_H
-# define MLXHANDLER_H
+#include "tracer.h"
 
-# define ESC	65307
-# define A		97
-# define S		115
-# define D		100
-# define Q		113
-# define W		119
-# define E		101
-# define PK		112
-# define CLOSE	33
-# define SPACE  32
+void	reflectvec(const t_vec3f v, const t_vec3f n, t_ray *r)
+{
+	t_vec3f tmp;
 
-void	cameraMove(t_cam *cam, const struct s_mlx *m, uint32_t a);
-void	cameraRoll(const t_cam *cam, struct s_mlx *m);
-int		end_wind(struct s_mlx *m);
-#endif
+	s_scale(n, 2.0f * dotp(v, n), tmp);
+	sub_(v, tmp, r->d);
+	invert_(r->d, r->inv_d);
+}
