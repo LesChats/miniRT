@@ -6,7 +6,7 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/20 20:14:41 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/22 17:04:52 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/04/25 00:53:45 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,12 @@ uint8_t			finalscene(struct s_prescene *ps, struct s_scene *const scene)
 	scene->render.lghts = ps->lghts;
 	scene->count = ps->prmtvs.size;
 	scene->render.bvh.prmtvs = ps->prmtvs;
+	if (scene->count < 1)
+	{
+		free_prescene(ps, ps->mlx);
+		printf("there is nothing to render\n");
+		exit(0);
+	}
 	if (!(builder(&scene->render.bvh)))
 		return (return_message("Fail to counstruct the BVH !"));
 	if (!(reorder_data(scene, scene->render.bvh.prmtvs.prmtvs,
