@@ -1,2 +1,0 @@
-Norme: ./includes/*.h
-Warning: Not a valid file
