@@ -6,7 +6,7 @@
 /*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/17 15:14:10 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/21 13:45:49 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 19:49:35 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	skyimg(struct s_skybox *sky, char *relativepath, void *mlx,
 			&sky->widthu, &sky->heightv);
 }
 
-uint8_t		setskybox(struct s_skybox *sky, char *filename, void *mlx)
+uint8_t	setskybox(struct s_skybox *sky, char *filename, void *mlx)
 {
 	const uint32_t	n = ft_strlen(filename);
 	uint32_t		i;
@@ -50,7 +50,7 @@ uint8_t		setskybox(struct s_skybox *sky, char *filename, void *mlx)
 	while (i < 6)
 	{
 		if (sky->skyimg[i])
-			sky->skybox[i] = (int*)(((t_img*)sky->skyimg[i])->data);
+			sky->skybox[i] = (int *)(((t_img *)sky->skyimg[i])->data);
 		else
 		{
 			return (return_message(
@@ -63,7 +63,7 @@ uint8_t		setskybox(struct s_skybox *sky, char *filename, void *mlx)
 	return (1);
 }
 
-void		grabtexture(void *mlx, struct s_text *t, const char **s)
+void	grabtexture(void *mlx, struct s_text *t, const char **s)
 {
 	char		relativepath[1024];
 	uint32_t	i;
@@ -78,7 +78,7 @@ void		grabtexture(void *mlx, struct s_text *t, const char **s)
 	relativepath[i] = 0;
 	t->img = mlx_xpm_file_to_image(mlx, relativepath, &t->wdth, &t->hght);
 	if (t->img)
-		t->addr = (int*)((t_img*)t->img)->data;
+		t->addr = (int *)((t_img *)t->img)->data;
 	else
 		return_messageonly("Occure while loading texture, color is black now");
 }

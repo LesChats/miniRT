@@ -6,7 +6,7 @@
 /*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 13:30:17 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/24 13:50:47 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/24 16:50:29 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 #  define ANTI2		ANTIALIASING
 # endif
 
-typedef struct			s_tdata
+typedef struct s_tdata
 {
 	const struct s_bvhl	*s;
 	const t_cam			*cam;
@@ -53,18 +53,18 @@ typedef struct			s_tdata
 */
 void					set_cam(t_cam *cam, const float xres);
 void					setup(struct s_scene *s, struct s_mlx *mlx,
-		uint8_t save);
+							uint8_t save);
 
 /*
 **	Mains render functions
 */
 void					genray(const t_cam *cam, t_ray *ray, const float i,
-		const float j);
+							const float j);
 void					render(const struct s_scene *s, const t_cam *cam);
 void					getcolor(const struct s_bvhl *s, t_ray *r,
-		t_vec3f color, uint32_t d);
+							t_vec3f color, uint32_t d);
 void					getbackground(const struct s_skybox *sky,
-		const t_vec3f ray, t_vec3f color);
+							const t_vec3f ray, t_vec3f color);
 /*
 ** Normals functions
 */
@@ -84,13 +84,13 @@ typedef void			(*t_shaders)(const struct s_bvhl*, const t_hinfo*,
 		t_vec3f);
 
 void					specularl(const struct s_bvhl *s, const t_hinfo *hi,
-		t_vec3f color);
+							t_vec3f color);
 void					diffusel(const struct s_bvhl *s, const t_hinfo *hi,
-		t_vec3f color);
+							t_vec3f color);
 void					rflctl(const struct s_bvhl *s, const t_hinfo *hi,
-		t_vec3f color);
+							t_vec3f color);
 void					reflectvec(const t_vec3f v, const t_vec3f n,
-		t_ray *r);
+							t_ray *r);
 
 /*
 **	Texture - colors
@@ -99,19 +99,19 @@ typedef void			(*t_colors)(t_vec3f, const t_hinfo*,
 		const t_material*);
 
 void					onlycolor(t_vec3f color, const t_hinfo *h,
-		const t_material *m);
+							const t_material *m);
 void					normalraindow(t_vec3f color, const t_hinfo *h,
-		const t_material *m);
+							const t_material *m);
 void					checkerboard(t_vec3f color, const t_hinfo *h,
-		const t_material *m);
+							const t_material *m);
 void					marble(t_vec3f color, const t_hinfo *h,
-		const t_material *m);
+							const t_material *m);
 void					turbulence(t_vec3f color, const t_hinfo *h,
-		const t_material *m);
+							const t_material *m);
 void					wood(t_vec3f color, const t_hinfo *h,
-		const t_material *m);
+							const t_material *m);
 void					fromtext(t_vec3f color, const t_hinfo *h,
-		const t_material *m);
+							const t_material *m);
 /*
 **	Color utils
 */

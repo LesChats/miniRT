@@ -6,7 +6,7 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 10:02:32 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/24 17:09:44 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 19:44:52 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 static inline uint8_t	update(uint32_t *prmtv_arr, t_string *track,
 		uint32_t i)
 {
-	const char c = '0' + i;
+	const char	c = '0' + i;
 
 	++prmtv_arr[i];
 	return (update_string(track, &c, 1));
 }
 
-static uint8_t			check_compound(const char a, const char b,
+static uint8_t	check_compound(const char a, const char b,
 		uint32_t *prmtv_arr, t_string *track)
 {
 	if ((a == 'p') & (b == 'y'))
@@ -39,7 +39,7 @@ static uint8_t			check_compound(const char a, const char b,
 		return (return_message("primitive not reconnized !"));
 }
 
-static uint8_t			add_prmtv(const char a, const char b,
+static uint8_t	add_prmtv(const char a, const char b,
 		uint32_t *prmtv_arr, t_string *track)
 {
 	if (a == 'A')
@@ -67,7 +67,7 @@ static uint8_t			add_prmtv(const char a, const char b,
 	return (1);
 }
 
-uint8_t					count_prmtvs(uint32_t *prmtvs_arr, t_string *tracker,
+uint8_t	count_prmtvs(uint32_t *prmtvs_arr, t_string *tracker,
 		const int fd)
 {
 	t_string	s;

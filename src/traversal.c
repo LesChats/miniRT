@@ -6,26 +6,26 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/14 11:30:54 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/21 12:59:29 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 19:42:16 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vectors.h"
 #include "bvh.h"
 
-static inline void		swap32(void *a, void *b)
+static inline void	swap32(void *a, void *b)
 {
-	uint32_t tmp;
+	uint32_t	tmp;
 
-	tmp = *(uint32_t*)a;
-	*(uint32_t*)a = *(uint32_t*)b;
-	*(uint32_t*)b = tmp;
+	tmp = *(uint32_t *)a;
+	*(uint32_t *)a = *(uint32_t *)b;
+	*(uint32_t *)b = tmp;
 }
 
-static uint8_t			inter(const t_ray *ray, const t_box *bbox,
+static uint8_t	inter(const t_ray *ray, const t_box *bbox,
 		float *near, float *far)
 {
-	float ttmm[4];
+	float	ttmm[4];
 
 	ttmm[0] = (bbox->min[0] - ray->o[0]) * ray->inv_d[0];
 	ttmm[1] = (bbox->max[0] - ray->o[0]) * ray->inv_d[0];
@@ -50,7 +50,7 @@ static uint8_t			inter(const t_ray *ray, const t_box *bbox,
 	return (1);
 }
 
-static inline void		function_02(const struct s_node *n,
+static inline void	function_02(const struct s_node *n,
 		const t_ray *r, struct s_travarray *td, const int32_t ni)
 {
 	float			bh[4];
@@ -77,7 +77,7 @@ static inline void		function_02(const struct s_node *n,
 		td->arr[++td->stkptr] = (t_traversal){ni + n[ni].offset, bh[2]};
 }
 
-static uint8_t			function_01(const t_prmtv *prmtvs, const t_ray *r,
+static uint8_t	function_01(const t_prmtv *prmtvs, const t_ray *r,
 		struct s_hit *h, const t_node *n)
 {
 	static const t_collider	hits_func[] = {sphr_hit, pln_hit, sqr_hit,
@@ -103,7 +103,7 @@ static uint8_t			function_01(const t_prmtv *prmtvs, const t_ray *r,
 	return (0);
 }
 
-uint8_t					traverser(const struct s_bvh *bvh, const t_ray *r,
+uint8_t	traverser(const struct s_bvh *bvh, const t_ray *r,
 		struct s_hit *h, uint8_t shad)
 {
 	struct s_travarray	todo;

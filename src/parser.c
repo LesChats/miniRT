@@ -6,7 +6,7 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/14 14:48:09 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/24 17:05:40 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 19:10:13 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static uint8_t	prmtvs_arrinit(struct s_prescene *ps, uint32_t *prmtvs_arr,
 		const int fd)
 {
-	uint32_t i;
+	uint32_t	i;
 
 	i = 0;
 	while (i < PRMTVNB + 2)
@@ -36,23 +36,25 @@ static uint8_t	prmtvs_arrinit(struct s_prescene *ps, uint32_t *prmtvs_arr,
 static uint8_t	struct_malloc(struct s_prescene *ps, uint32_t *prmtvs_arr)
 {
 	ps->total_size = prmtvs_arr[SP] * sizeof(t_sphr)
-			+ prmtvs_arr[P] * sizeof(t_pln)
-			+ prmtvs_arr[SQ] * sizeof(t_sqr)
-			+ prmtvs_arr[CY] * sizeof(t_cyl)
-			+ prmtvs_arr[T] * sizeof(t_trgl)
-			+ prmtvs_arr[CP] * sizeof(t_cps);
-	if (!(ps->prmtvs_data = malloc(ps->total_size)))
+		+ prmtvs_arr[P] * sizeof(t_pln) + prmtvs_arr[SQ] * sizeof(t_sqr)
+		+ prmtvs_arr[CY] * sizeof(t_cyl) + prmtvs_arr[T] * sizeof(t_trgl)
+		+ prmtvs_arr[CP] * sizeof(t_cps);
+	ps->prmtvs_data = malloc(ps->total_size);
+	if (!ps->prmtvs_data)
 		return (return_message("malloc prmtvs_data fail|| file : parser.c"));
-	if (!(ps->prmtvs.prmtvs = malloc(sizeof(t_prmtv) * ps->prmtvs.size)))
+	ps->prmtvs.prmtvs = malloc(sizeof(t_prmtv) * ps->prmtvs.size);
+	if (!ps->prmtvs.prmtvs)
 		return (return_message("malloc prmtvs fail || file : parser.c"));
-	if (!(ps->mtrls_data = malloc(sizeof(t_material) * ps->prmtvs.size)))
+	ps->mtrls_data = malloc(sizeof(t_material) * ps->prmtvs.size);
+	if (!ps->mtrls_data)
 		return (return_message("malloc mtrls_data fail || file : parser.c"));
 	ps->cams.count = prmtvs_arr[C];
-	if (!(ps->cams.cams = (t_cam *)malloc(sizeof(t_cam) * ps->cams.count)))
+	ps->cams.cams = (t_cam *)malloc(sizeof(t_cam) * ps->cams.count);
+	if (!ps->cams.cams)
 		return (return_message("malloc camera fail || file : parser.c"));
 	ps->lghts.count = prmtvs_arr[L];
-	if (!(ps->lghts.lghts = (t_lght *)malloc(sizeof(t_lght) *
-					ps->lghts.count)))
+	ps->lghts.lghts = (t_lght *)malloc(sizeof(t_lght) * ps->lghts.count);
+	if (!ps->lghts.lghts)
 		return (return_message("malloc lghts fail || file : parser.c"));
 	return (1);
 }
@@ -101,14 +103,15 @@ static uint8_t	second_read(const char *rt_file, struct s_prescene *ps)
 	return (1);
 }
 
-uint8_t			parse(const char *rt_file, struct s_scene *const scene,
+uint8_t	parse(const char *rt_file, struct s_scene *const scene,
 		struct s_mlx *mlx)
 {
-	struct s_prescene pres;
+	struct s_prescene	pres;
 
 	if (!end_with_rt(rt_file))
 		return (return_message("The file is not an .rt file"));
-	if (!(mlx->mlx = mlx_init()))
+	mlx->mlx = mlx_init();
+	if (!mlx->mlx)
 		return (return_message("Fatal error > Fail to initialize MLX !"));
 	pres.mlx = mlx->mlx;
 	if (!(first_read(rt_file, &pres)))

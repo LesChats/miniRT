@@ -6,7 +6,7 @@
 /*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/22 11:19:23 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/23 15:48:28 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 20:20:59 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	functionality(void)
 	printf(" for save your image or C to get camera informations <3\33[0m\n");
 }
 
-void		info_message(struct s_scene *s)
+void	info_message(struct s_scene *s)
 {
 	t_string	st;
 	int			fd;
@@ -47,24 +47,24 @@ void		info_message(struct s_scene *s)
 	free(st.s);
 }
 
-void		return_messageonly(const char *mess)
+void	return_messageonly(const char *mess)
 {
 	printf("error:\t%s\n", mess);
 	return ;
 }
 
-uint8_t		return_message(const char *mess)
+uint8_t	return_message(const char *mess)
 {
 	printf("error:\t%s\n", mess);
 	return (0);
 }
 
-void		camera_message(t_cam *c, uint32_t cam_id)
+void	camera_message(t_cam *c, uint32_t cam_id)
 {
 	printf("\n\033[0;31m Cam info:\033[0m\n");
 	printf("\033[0;33m - Cam ID:\t\t%d\n", cam_id);
 	printf(" - Cam fov:\t\t%.3f\n", c->fov);
 	printf(" - Cam pos:\t\t%.3f/%.3f/%.3f\n", c->pts[0], c->pts[1], c->pts[2]);
 	printf(" - Cam orientaton:\t%.3f/%.3f/%.3f\033[0m\n", c->orient[0],
-			c->orient[1], c->orient[2]);
+		c->orient[1], c->orient[2]);
 }

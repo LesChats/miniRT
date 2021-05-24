@@ -6,7 +6,7 @@
 /*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/04 19:00:21 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/23 14:36:45 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 19:40:35 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 void	pln_nrml(const void *const pln, t_hinfo *hi)
 {
-	const t_pln *const pl = (t_pln*)pln;
+	const t_pln *const	pl = (t_pln*)pln;
 
 	equal_(hi->n, pl->n);
 }
@@ -66,7 +66,7 @@ uint8_t	pln_bounding(const void *pln, t_box *bbox)
 
 uint8_t	pln_parser(struct s_prescene *ps, const char *s, uint32_t *pos_num)
 {
-	t_pln *pln;
+	t_pln	*pln;
 
 	pln = (t_pln *)(ps->prmtvs_data + *pos_num);
 	ps->prmtvs.prmtvs[pos_num[1]].prmtv = pln;

@@ -6,7 +6,7 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 10:42:34 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/24 13:51:40 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 20:08:08 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "tracer.h"
 #include "mlxhandler.h"
 
-static int		keyboardhandle(uint32_t key, struct s_mlx *m)
+static int	keyboardhandle(uint32_t key, struct s_mlx *m)
 {
 	if (key == ESC)
 		return (end_wind(m));
@@ -39,13 +39,13 @@ static int		keyboardhandle(uint32_t key, struct s_mlx *m)
 	return (1);
 }
 
-static int		mousehandle(uint32_t key, int x, int y, struct s_mlx *m)
+static int	mousehandle(uint32_t key, int x, int y, struct s_mlx *m)
 {
 	float	*orient;
 	int32_t	resx;
 	int32_t	resy;
-	t_vec3f tmp;
-	t_vec3f tmp2;
+	t_vec3f	tmp;
+	t_vec3f	tmp2;
 
 	if (key == 1)
 	{
@@ -54,25 +54,25 @@ static int		mousehandle(uint32_t key, int x, int y, struct s_mlx *m)
 		resy = m->s->rsltn[1] / 2;
 		mlx_mouse_get_pos(m->mlx, m->mlx_win, &x, &y);
 		s_scale(m->s->cams.cams[m->cam_id].ref[2],
-				(y > resy) - (y < resy), tmp);
+			(y > resy) - (y < resy), tmp);
 		s_scale(m->s->cams.cams[m->cam_id].ref[1],
-				(x > resx) - (x < resx), tmp2);
+			(x > resx) - (x < resx), tmp2);
 		add_(tmp, tmp2, tmp);
 		add_(orient, tmp, orient);
 		set_cam(m->s->cams.cams + m->cam_id, m->s->rsltn[0]);
 		render(m->s, m->s->cams.cams + m->cam_id);
 		mlx_put_image_to_window(m->mlx, m->mlx_win,
-				m->s->cams.cams[m->cam_id].img, 0, 0);
+			m->s->cams.cams[m->cam_id].img, 0, 0);
 	}
 	return (0);
 }
 
-static void		hookloop(struct s_mlx *mlx, uint8_t save)
+static void	hookloop(struct s_mlx *mlx, uint8_t save)
 {
 	if (save != 2)
 	{
 		mlx_put_image_to_window(mlx->mlx, mlx->mlx_win,
-				mlx->s->cams.cams[0].img, 0, 0);
+			mlx->s->cams.cams[0].img, 0, 0);
 		mlx_hook(mlx->mlx_win, CLOSE, 0L, end_wind, mlx);
 		mlx_hook(mlx->mlx_win, 2, 1, keyboardhandle, mlx);
 		mlx_hook(mlx->mlx_win, 4, 4, mousehandle, mlx);
@@ -82,9 +82,9 @@ static void		hookloop(struct s_mlx *mlx, uint8_t save)
 
 static uint8_t	option(int ac, char **av, struct s_scene *s, void *mlx)
 {
-	uint8_t sky;
-	uint8_t res;
-	int32_t i;
+	uint8_t	sky;
+	uint8_t	res;
+	int32_t	i;
 
 	sky = 0;
 	res = 1;
@@ -106,7 +106,7 @@ static uint8_t	option(int ac, char **av, struct s_scene *s, void *mlx)
 	return (res);
 }
 
-int				main(int ac, char **av)
+int	main(int ac, char **av)
 {
 	struct s_scene	scene;
 	struct s_mlx	mlx;

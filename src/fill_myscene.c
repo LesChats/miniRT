@@ -6,7 +6,7 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 10:08:59 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/24 23:47:31 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 19:14:15 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static uint8_t	add_prmtv(struct s_prescene *ps, const char *s,
 		const uint32_t index, uint32_t *pos_num)
 {
-	static const t_parser prmtvs_parser[] = {
+	static const t_parser	prmtvs_parser[] = {
 		sphrs_parser, pln_parser,
 		sqr_parser, cyl_parser,
 		trgl_parser, cps_parser,
@@ -27,7 +27,7 @@ static uint8_t	add_prmtv(struct s_prescene *ps, const char *s,
 	return (prmtvs_parser[ps->tracker.s[index] - '0'](ps, s + 2, pos_num));
 }
 
-uint8_t			fill_myscene(struct s_prescene *ps, const int fd)
+uint8_t	fill_myscene(struct s_prescene *ps, const int fd)
 {
 	t_string	s;
 	uint32_t	i;
@@ -53,9 +53,9 @@ uint8_t			fill_myscene(struct s_prescene *ps, const int fd)
 	return (1);
 }
 
-void			findambiant(t_vec3f amb, const char *s, const uint32_t n)
+void	findambiant(t_vec3f amb, const char *s, const uint32_t n)
 {
-	uint32_t i;
+	uint32_t	i;
 
 	i = 0;
 	while (i < n)

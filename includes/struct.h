@@ -6,7 +6,7 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 11:57:15 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/23 13:50:49 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/24 16:48:12 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ struct				s_text
 	int				wdth;
 };
 
-typedef struct		s_material
+typedef struct s_material
 {
 	struct s_text	text;
 	t_vec3f			color;
@@ -64,7 +64,7 @@ typedef struct		s_material
 **	PRIMITIVES
 */
 
-typedef struct		s_sphr
+typedef struct s_sphr
 {
 	t_vec3f			center;
 	float			radius;
@@ -72,13 +72,13 @@ typedef struct		s_sphr
 
 }					t_sphr;
 
-typedef struct		s_pln
+typedef struct s_pln
 {
 	t_vec3f			pts;
 	t_vec3f			n;
 }					t_pln;
 
-typedef struct		s_sqr
+typedef struct s_sqr
 {
 	t_vec3f			pts;
 	t_vec3f			n;
@@ -86,7 +86,7 @@ typedef struct		s_sqr
 	t_vec3f			min;
 }					t_sqr;
 
-typedef struct		s_cyl
+typedef struct s_cyl
 {
 	float			radius;
 	float			radius2;
@@ -96,7 +96,7 @@ typedef struct		s_cyl
 	t_vec3f			pb;
 }					t_cyl;
 
-typedef struct		s_trgl
+typedef struct s_trgl
 {
 	t_vec3f			p1;
 	t_vec3f			p2;
@@ -106,7 +106,7 @@ typedef struct		s_trgl
 	t_vec3f			n;
 }					t_trgl;
 
-typedef struct		s_cps
+typedef struct s_cps
 {
 	t_vec3f			pa;
 	t_vec3f			pb;
@@ -119,27 +119,27 @@ typedef struct		s_cps
 /*
 **	BVH structures
 */
-typedef struct		s_prmtv
+typedef struct s_prmtv
 {
 	void			*prmtv;
 	t_material		*mtrl;
 	uint8_t			type;
 }					t_prmtv;
 
-struct				s_prmtvs
+struct s_prmtvs
 {
 	t_prmtv			*prmtvs;
 	uint32_t		size;
 };
 
-typedef struct		s_box
+typedef struct s_box
 {
 	t_vec3f			max;
 	t_vec3f			min;
 	t_vec3f			extent;
 }					t_box;
 
-typedef struct		s_node
+typedef struct s_node
 {
 	t_box			bbox;
 	uint32_t		start;
@@ -147,7 +147,7 @@ typedef struct		s_node
 	uint32_t		offset;
 }					t_node;
 
-struct				s_bvh
+struct s_bvh
 {
 	t_node			*nodes;
 	struct s_prmtvs	prmtvs;
@@ -156,13 +156,13 @@ struct				s_bvh
 /*
 **	lights
 */
-typedef struct		s_lght
+typedef struct s_lght
 {
 	t_vec3f			color;
 	t_vec3f			pts;
 }					t_lght;
 
-struct				s_lghts
+struct s_lghts
 {
 	t_lght			*lghts;
 	t_vec3f			amb;
@@ -173,7 +173,7 @@ struct				s_lghts
 **	cameras
 */
 
-typedef struct		s_cam
+typedef struct s_cam
 {
 	uint32_t		*addr;
 	void			*img;
@@ -238,7 +238,7 @@ struct				s_mlx
 /*
 **	ray
 */
-typedef struct		s_ray
+typedef struct s_ray
 {
 	t_vec3f			o;
 	t_vec3f			d;
@@ -252,7 +252,7 @@ struct				s_hit
 	uint32_t		p;
 };
 
-typedef struct		s_hinfo
+typedef struct s_hinfo
 {
 	t_ray			*r;
 	t_vec3f			view;

@@ -6,7 +6,7 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 11:41:56 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/21 13:57:26 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 19:47:22 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,12 @@ void	onlycolor(t_vec3f color, const t_hinfo *h, const t_material *m)
 
 void	checkerboard(t_vec3f color, const t_hinfo *h, const t_material *m)
 {
-	const uint8_t x = ((int)((h->r->o[0] + POINT_OFFSET) / m->scale) & 1) == 0;
-	const uint8_t y = ((int)((h->r->o[1] + POINT_OFFSET) / m->scale) & 1) == 0;
-	const uint8_t z = ((int)((h->r->o[2] + POINT_OFFSET) / m->scale) & 1) == 0;
+	const uint8_t	x = ((int)((h->r->o[0] + POINT_OFFSET)
+				/ m->scale) & 1) == 0;
+	const uint8_t	y = ((int)((h->r->o[1] + POINT_OFFSET)
+				/ m->scale) & 1) == 0;
+	const uint8_t	z = ((int)((h->r->o[2] + POINT_OFFSET)
+				/ m->scale) & 1) == 0;
 
 	if (x ^ y ^ z)
 		return (equal_(color, m->color));
@@ -52,8 +55,7 @@ void	marble(t_vec3f color, const t_hinfo *h, const t_material *m)
 		noisecoef += (1.f / i) * fabsf(noise((t_vec3f){
 					i * 0.05 * xyz[0],
 					i * 0.15 * xyz[1],
-					i * 0.05 * xyz[2]
-					}));
+					i * 0.05 * xyz[2]}));
 		++i;
 	}
 	noisecoef = 0.5f * sinf((xyz[0] + xyz[1]) * 0.05f + noisecoef) + 0.5f;
@@ -78,8 +80,7 @@ void	turbulence(t_vec3f color, const t_hinfo *h, const t_material *m)
 		noisecoef += (1.f / i) * fabsf(noise((t_vec3f){
 					i * 0.05 * xyz[0],
 					i * 0.05 * xyz[1],
-					i * 0.05 * xyz[2]
-					}));
+					i * 0.05 * xyz[2]}));
 		++i;
 	}
 	s_scale(m->color, noisecoef, color);

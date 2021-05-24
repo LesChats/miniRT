@@ -6,7 +6,7 @@
 /*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/01 16:07:46 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/21 11:55:56 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 19:53:54 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,20 @@
 
 static uint8_t	writeheader(const struct s_scene *s, const int fd)
 {
-	static uint8_t header[54];
+	static uint8_t	header[54];
 
 	header[0] = 0x42;
 	header[1] = 0x4D;
-	*(uint32_t*)(header + 2) = ((s->rsltn[0] * s->rsltn[1]) + 54);
+	*(uint32_t *)(header + 2) = ((s->rsltn[0] * s->rsltn[1]) + 54);
 	header[10] = 0x36;
 	header[14] = 40;
-	*(uint32_t*)(header + 18) = (s->rsltn[0]);
-	*(uint32_t*)(header + 22) = (s->rsltn[1]);
+	*(uint32_t *)(header + 18) = (s->rsltn[0]);
+	*(uint32_t *)(header + 22) = (s->rsltn[1]);
 	header[26] = 1;
 	header[28] = 32;
-	*(uint32_t*)(header + 34) = ((s->rsltn[0] * s->rsltn[1]));
-	*(uint32_t*)(header + 38) = 2835;
-	*(uint32_t*)(header + 42) = 2835;
+	*(uint32_t *)(header + 34) = ((s->rsltn[0] * s->rsltn[1]));
+	*(uint32_t *)(header + 38) = 2835;
+	*(uint32_t *)(header + 42) = 2835;
 	return (write(fd, header, 54) + 1);
 }
 
@@ -39,7 +39,8 @@ static uint8_t	writeimage(const struct s_scene *s, const t_cam *cam,
 	int32_t			i;
 	uint32_t		j;
 
-	if (!(image = (uint32_t*)malloc(sizeof(uint32_t) * size)))
+	image = (uint32_t *)malloc(sizeof(uint32_t) * size);
+	if (!image)
 		return (return_message("could not malloc space for --save !"));
 	i = s->rsltn[1] - 1;
 	while (i >= 0)
@@ -48,7 +49,7 @@ static uint8_t	writeimage(const struct s_scene *s, const t_cam *cam,
 		while (j < s->rsltn[0])
 		{
 			image[i * s->rsltn[0] + j] = cam->addr[((s->rsltn[1] - 1) - i)
-				* s->rsltn[0] + j];
+				*s->rsltn[0] + j];
 			++j;
 		}
 		--i;
@@ -59,7 +60,7 @@ static uint8_t	writeimage(const struct s_scene *s, const t_cam *cam,
 	return (1);
 }
 
-uint8_t			scenetobmp(const struct s_scene *s, const t_cam *cam)
+uint8_t	scenetobmp(const struct s_scene *s, const t_cam *cam)
 {
 	int				fd;
 	static uint8_t	num = '0';
@@ -71,8 +72,8 @@ uint8_t			scenetobmp(const struct s_scene *s, const t_cam *cam)
 	ft_memcpy(name + 15, ".bmp", 4);
 	name[19] = 0;
 	++num;
-	if ((fd = open(name,
-					O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR)) < 1)
+	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+	if (fd < 1)
 		return (0);
 	if (!writeheader(s, fd))
 		return (return_message("writing the header --bmp_save.c"));

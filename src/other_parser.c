@@ -6,7 +6,7 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 11:10:39 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/24 23:45:24 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/24 18:07:46 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ uint8_t	rsltn_parser(struct s_prescene *ps, const char *s,
 uint8_t	lght_parser(struct s_prescene *ps, const char *s,
 		uint32_t *pos_num)
 {
-	static uint32_t lght_pos = 0;
+	static uint32_t	lght_pos = 0;
 	t_lght *const	lght = ps->lghts.lghts + lght_pos++;
 	float			intensity;
 	t_vec3f			tmp;
@@ -59,7 +59,7 @@ uint8_t	ambnt_parser(struct s_prescene *ps, const char *s,
 
 uint8_t	parse_mat(t_material *m, const char **s, void *mlx)
 {
-	t_vec3f tmp;
+	t_vec3f	tmp;
 
 	if (!(vect_parse(tmp, s)))
 		return (return_message("bad color format"));
@@ -95,6 +95,9 @@ uint8_t	cams_parser(struct s_prescene *ps, const char *s,
 		return (return_message("Bad vector parse for camera position"));
 	if (!(vect_parse(cam->orient, &s)))
 		return (return_message("Bad vector parse for camera orientation"));
+	cam->orient[0] += 0.00001;
+	cam->orient[1] += 0.00001;
+	cam->orient[2] += 0.00001;
 	cam->fov = ft_atof(&s);
 	cam->filter = ft_atoi(&s);
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 10:31:27 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/24 14:05:20 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 20:28:13 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void	setupcams(struct s_scene *s, struct s_mlx *mlx)
 	{
 		cams[i].img = mlx_new_image(mlx->mlx, s->rsltn[0],
 				s->rsltn[1]);
-		cams[i].addr = (uint32_t*)(((t_img*)cams[i].img)->data);
+		cams[i].addr = (uint32_t *)(((t_img *)cams[i].img)->data);
 		cams[i].inv_x = invx;
 		cams[i].inv_y = invy;
 		set_cam(cams + i, resx);
@@ -35,14 +35,14 @@ static void	setupcams(struct s_scene *s, struct s_mlx *mlx)
 	}
 }
 
-void		setup(struct s_scene *s, struct s_mlx *mlx, uint8_t save)
+void	setup(struct s_scene *s, struct s_mlx *mlx, uint8_t save)
 {
 	uint32_t	xy_size[2];
 
 	if (save == 1)
 	{
-		mlx_get_screen_size(mlx->mlx, (int32_t*)xy_size,
-				(int32_t*)(xy_size + 1));
+		mlx_get_screen_size(mlx->mlx, (int32_t *)xy_size,
+			(int32_t *)(xy_size + 1));
 		if (s->rsltn[0] > (uint32_t)xy_size[0] || s->rsltn[0] < 1)
 			s->rsltn[0] = xy_size[0];
 		if (s->rsltn[1] > (uint32_t)xy_size[1] || s->rsltn[1] < 1)

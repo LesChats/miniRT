@@ -6,7 +6,7 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 12:48:06 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/22 17:07:50 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 20:03:17 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 #include "bvh.h"
 #include "stdlib.h"
 
-static uint8_t		resize_nodes(t_node **node, const uint32_t node_count)
+static uint8_t	resize_nodes(t_node **node, const uint32_t node_count)
 {
 	uint32_t		i;
 	t_node *const	tmp = *node;
 
-	if (!(*node = (t_node *)malloc(sizeof(t_node) * node_count)))
+	*node = (t_node *)malloc(sizeof(t_node) * node_count);
+	if (!*node)
 	{
 		free(tmp);
 		return (0);
@@ -36,7 +37,7 @@ static uint8_t		resize_nodes(t_node **node, const uint32_t node_count)
 
 static inline void	converter(const t_prmtv *p, t_box *bbox)
 {
-	static const t_bounder bounder[] = {
+	static const t_bounder	bounder[] = {
 		sphr_bounding,
 		pln_bounding,
 		sqr_bounding,
@@ -103,13 +104,14 @@ static inline void	add_totodo(t_prmtv *pv, struct s_buildstak *todo,
 	todo->stack[todo->ptr++] = (struct s_buildentry){count - 1, start, mid};
 }
 
-uint8_t				builder(struct s_bvh *bvh)
+uint8_t	builder(struct s_bvh *bvh)
 {
 	struct s_buildstak	todo;
 	t_box				bc;
 	uint32_t			node_count;
 
-	if (!(bvh->nodes = malloc(sizeof(t_node) * (bvh->prmtvs.size * 2))))
+	bvh->nodes = malloc(sizeof(t_node) * (bvh->prmtvs.size * 2));
+	if (!bvh->nodes)
 		return (0);
 	todo.stack[0] = (struct s_buildentry){0xfffffffc, 0, bvh->prmtvs.size};
 	todo.ptr = 1;
@@ -120,8 +122,8 @@ uint8_t				builder(struct s_bvh *bvh)
 		if (todo.stack[todo.ptr].parent != 0xfffffffc)
 		{
 			if (--bvh->nodes[todo.stack[todo.ptr].parent].offset == TOUCH)
-				bvh->nodes[todo.stack[todo.ptr].parent].offset =
-					node_count - todo.stack[todo.ptr].parent;
+				bvh->nodes[todo.stack[todo.ptr].parent].offset
+					= node_count - todo.stack[todo.ptr].parent;
 		}
 		if (bvh->nodes[node_count++].offset == 0)
 			continue ;

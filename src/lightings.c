@@ -6,7 +6,7 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 12:45:48 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/24 16:33:51 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 19:50:22 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,11 @@ static inline uint8_t	diffuse(const struct s_bvh *bvh,
 	return (0);
 }
 
-static inline void		specular(const t_lght *const lght, const t_hinfo *hi,
+static inline void	specular(const t_lght *const lght, const t_hinfo *hi,
 		t_vec3f spec)
 {
-	t_vec3f h;
-	t_vec3f light;
+	t_vec3f	h;
+	t_vec3f	light;
 
 	add_(hi->r->d, hi->view, h);
 	normalize(h);
@@ -52,8 +52,7 @@ static inline void		specular(const t_lght *const lght, const t_hinfo *hi,
 	add_(spec, light, spec);
 }
 
-void					diffusel(const struct s_bvhl *s, const t_hinfo *hi,
-		t_vec3f color)
+void	diffusel(const struct s_bvhl *s, const t_hinfo *hi, t_vec3f color)
 {
 	t_vec3f			ambi;
 	t_vec3f			diff;
@@ -71,8 +70,7 @@ void					diffusel(const struct s_bvhl *s, const t_hinfo *hi,
 	add_(ambi, color, color);
 }
 
-void					specularl(const struct s_bvhl *s, const t_hinfo *hi,
-		t_vec3f color)
+void	specularl(const struct s_bvhl *s, const t_hinfo *hi, t_vec3f color)
 {
 	t_vec3f			ambi;
 	t_vec3f			diff;
@@ -94,8 +92,7 @@ void					specularl(const struct s_bvhl *s, const t_hinfo *hi,
 	add_(ambi, color, color);
 }
 
-void					rflctl(const struct s_bvhl *s, const t_hinfo *hi,
-		t_vec3f color)
+void	rflctl(const struct s_bvhl *s, const t_hinfo *hi, t_vec3f color)
 {
 	t_vec3f		ambi;
 	t_vec3f		dsr[3];

@@ -6,18 +6,18 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/20 19:57:11 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/24 14:47:11 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 19:32:32 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tracer.h"
 #include "bvh.h"
 
-static void			bump(t_vec3f normal, const t_vec3f pts, const float scale,
+static void	bump(t_vec3f normal, const t_vec3f pts, const float scale,
 		const float bump)
 {
-	t_vec3f tmp;
-	t_vec3f noi;
+	t_vec3f	tmp;
+	t_vec3f	noi;
 
 	s_scale(pts, scale, tmp);
 	noi[0] = noise(tmp);
@@ -31,7 +31,7 @@ static void			bump(t_vec3f normal, const t_vec3f pts, const float scale,
 static inline void	setinfo(t_hinfo *hi, t_ray *r, const struct s_hit *h,
 		const t_prmtv *hp)
 {
-	static const t_normals grabnormal[] = {sphr_nrml, pln_nrml, sqr_nrml,
+	static const t_normals	grabnormal[] = {sphr_nrml, pln_nrml, sqr_nrml,
 		cyl_nrml, trgl_nrml, cps_nrml};
 
 	s_scale(r->d, h->t, hi->n);
@@ -48,8 +48,7 @@ static inline void	setinfo(t_hinfo *hi, t_ray *r, const struct s_hit *h,
 		bump(hi->n, hi->r->o, hp->mtrl->scale, hp->mtrl->bump);
 }
 
-void				getcolor(const struct s_bvhl *s, t_ray *r, t_vec3f color,
-		uint32_t d)
+void	getcolor(const struct s_bvhl *s, t_ray *r, t_vec3f color, uint32_t d)
 {
 	static const t_shaders	lightings[] = {diffusel, specularl, rflctl};
 	static const t_colors	getcolor[] = {onlycolor, normalraindow,

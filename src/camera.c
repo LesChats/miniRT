@@ -6,19 +6,19 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 10:27:47 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/22 17:54:53 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/24 18:21:04 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tracer.h"
 
-void				genray(const t_cam *cam, t_ray *ray, const float i,
+void	genray(const t_cam *cam, t_ray *ray, const float i,
 		const float j)
 {
 	t_vec3f		a;
 	t_vec3f		b;
 	const float	u = i * cam->inv_x;
-	const float v = j * cam->inv_y;
+	const float	v = j * cam->inv_y;
 
 	equal_(ray->o, cam->pts);
 	s_scale(cam->hrzt, u, a);
@@ -34,11 +34,11 @@ static inline float	degrees_to_radians(const float degrees)
 	return (degrees * PI_180);
 }
 
-void				set_cam(t_cam *cam, const float xres)
+void	set_cam(t_cam *cam, const float xres)
 {
 	float	tmp;
-	t_vec3f u;
-	t_vec3f v;
+	t_vec3f	u;
+	t_vec3f	v;
 
 	sub_(cam->pts, cam->orient, cam->ref[0]);
 	normalize(cam->ref[0]);
@@ -56,7 +56,7 @@ void				set_cam(t_cam *cam, const float xres)
 	inv_(v, cam->left);
 }
 
-void				cameramove(t_cam *cam, const struct s_mlx *m, uint32_t a)
+void	cameramove(t_cam *cam, const struct s_mlx *m, uint32_t a)
 {
 	if (a % 2)
 		sub_(cam->pts, cam->ref[a % 3], cam->pts);
@@ -67,7 +67,7 @@ void				cameramove(t_cam *cam, const struct s_mlx *m, uint32_t a)
 	mlx_put_image_to_window(m->mlx, m->mlx_win, cam->img, 0, 0);
 }
 
-void				cameraroll(const t_cam *cam, struct s_mlx *m)
+void	cameraroll(const t_cam *cam, struct s_mlx *m)
 {
 	m->cam_id = (m->cam_id + 1) % m->s->cams.count;
 	mlx_clear_window(m->mlx, m->mlx_win);

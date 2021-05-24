@@ -6,7 +6,7 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 10:02:55 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/21 13:40:41 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 19:45:31 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	set_sqr(struct s_prescene *ps, uint32_t *pos_num, t_material *m,
 	*pos_num += sizeof(t_sqr);
 }
 
-uint8_t		cub_parser(struct s_prescene *ps, const char *s, uint32_t *pos_num)
+uint8_t	cub_parser(struct s_prescene *ps, const char *s, uint32_t *pos_num)
 {
 	t_sqr		*sqr;
 	t_material	*mat;
@@ -60,7 +60,7 @@ uint8_t		cub_parser(struct s_prescene *ps, const char *s, uint32_t *pos_num)
 	i = 0;
 	while (i < 6)
 	{
-		sqr = (t_sqr*)(ps->prmtvs_data + *pos_num);
+		sqr = (t_sqr *)(ps->prmtvs_data + *pos_num);
 		set_sqr(ps, pos_num, mat, sqr);
 		equal_(sqr->pts, center);
 		parse_sqr(sqr, hgth, i);

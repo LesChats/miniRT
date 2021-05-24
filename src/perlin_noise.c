@@ -6,7 +6,7 @@
 /*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/02 13:56:01 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/21 11:52:49 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 19:50:03 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,12 @@ static const uint32_t	g_perm[] = {
 	253, 79, 29, 115, 103, 142, 146, 52, 48, 89, 54, 121, 212, 122, 60, 28, 42
 };
 
-static float			fastfloor(float x)
+static float	fastfloor(float x)
 {
 	return ((int32_t)x - 1 * (x <= 0));
 }
 
-static float			c(float *xyz, const int32_t a)
+static float	c(float *xyz, const int32_t a)
 {
 	static const float	grad3[][3] = {
 	{1, 1, 0}, {-1, 1, 0}, {1, -1, 0}, {-1, -1, 0},
@@ -67,7 +67,7 @@ static float			c(float *xyz, const int32_t a)
 	return (t * t * dotp(grad3[a], xyz));
 }
 
-static float			noise_suite(float *tmp, float *ijk, float *xyz)
+static float	noise_suite(float *tmp, float *ijk, float *xyz)
 {
 	int32_t	abc[3];
 	int32_t	gi[4];
@@ -84,10 +84,10 @@ static float			noise_suite(float *tmp, float *ijk, float *xyz)
 		abc[2] + (xyz[2] >= xyz[0] || xyz[2] >= xyz[1])]]] % 12;
 	gi[3] = g_perm[abc[0] + 1 + g_perm[abc[1] + 1 + g_perm[abc[2] + 1]]] % 12;
 	return ((c(tmp, gi[1]) + c(tmp + 3, gi[2]) + c(tmp + 6, gi[3])
-		+ c(xyz, gi[0])) * 32.f);
+			+ c(xyz, gi[0])) * 32.f);
 }
 
-float					noise(t_vec3f in)
+float	noise(t_vec3f in)
 {
 	const float	g3 = 1.f / 6.f;
 	float		tmp[9];

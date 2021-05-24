@@ -2,14 +2,30 @@ R 1600 800
 
 A 0.2	255,255,255
 
-c 13,2,0	0,0,0	50
+#c 13,200,0	0,0,0	50
 #c 0,10,-1    0,0,0	50
-c 30,2,0	0,0,0	70
-l 0,13,0	0.6		255,255,255
+#c 30,2,0	0,0,0	70
 
+#Lumiere au dessu!
+l 0,200,0	0.6		255,255,255
+# autre lumiere dans la profondeur + couleur
+l 20,0,50  0.5		255,0,255
+#camera face au cercle
+c 0,0,50	0,0,0	70
 
-#sp	0,0,0	4				255,0,0
-#pl	0,-2,0	0,1,0			0,255,255
-#sq 0,0,0	1,0,1 	3		0,255,0
-#cy	2,0,2	0,1,0	2 3		0,0,255	
-#tr	0,2,0	0,0,0	0,1,2	255,0,255
+#camera face au plan
+c  0,50,0  0,0,0	70
+
+#sphere au cord 0,0,0
+sp	0,0,0	20				255,0,0
+#plan avec vecteur z null
+pl	0,-30,0	0,1,0			0,255,255
+#cylindre qui croit en Y
+cy	30,0,2	0,1,0	20 30		0,0,255	
+#Le triangle (il coupe le cerlce)
+tr	0,20,0	0,0,0	0,10,20	255,0,255
+#camera plus interessante pour le trinangle ^^
+c 10,10,50  0,0,0 70
+
+#un carrer vert pour le fun
+sq -30,0,0	1,0,1 	10		0,255,0

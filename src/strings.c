@@ -6,13 +6,13 @@
 /*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 12:59:13 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/21 10:35:29 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 20:11:02 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-uint8_t				update_string(t_string *str, const char *src, int32_t n)
+uint8_t	update_string(t_string *str, const char *src, int32_t n)
 {
 	char			*tmp;
 	const uint32_t	wanted = n + str->len;
@@ -22,7 +22,8 @@ uint8_t				update_string(t_string *str, const char *src, int32_t n)
 		while (str->size < wanted)
 			str->size <<= 1;
 		tmp = str->s;
-		if (!(str->s = (char *)malloc(str->size + 1)))
+		str->s = (char *)malloc(str->size + 1);
+		if (!str->s)
 		{
 			free(tmp);
 			return (0);
@@ -36,9 +37,10 @@ uint8_t				update_string(t_string *str, const char *src, int32_t n)
 	return (1);
 }
 
-uint8_t				initilize_string(t_string *string, uint32_t n)
+uint8_t	initilize_string(t_string *string, uint32_t n)
 {
-	if (!(string->s = (char*)malloc(n)))
+	string->s = (char *)malloc(n);
+	if (!string->s)
 		return (0);
 	*string->s = 0;
 	string->len = 0;
@@ -48,8 +50,8 @@ uint8_t				initilize_string(t_string *string, uint32_t n)
 
 static inline void	wordcopy(uint64_t dstp, uint64_t srcp, uint32_t len)
 {
-	register uint64_t a0;
-	register uint64_t a1;
+	register uint64_t	a0;
+	register uint64_t	a1;
 
 	if (len & 1)
 	{
@@ -72,7 +74,7 @@ static inline void	wordcopy(uint64_t dstp, uint64_t srcp, uint32_t len)
 	}
 }
 
-void				ft_memcpy(void *dest, const void *src, uint32_t n)
+void	ft_memcpy(void *dest, const void *src, uint32_t n)
 {
 	uint64_t	dstp;
 	uint64_t	srcp;
@@ -87,5 +89,5 @@ void				ft_memcpy(void *dest, const void *src, uint32_t n)
 		n &= 7;
 	}
 	while (n--)
-		*(uint8_t*)dstp++ = *(uint8_t*)srcp++;
+		*(uint8_t *)dstp++ = *(uint8_t *)srcp++;
 }

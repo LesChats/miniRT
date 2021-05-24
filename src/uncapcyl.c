@@ -6,16 +6,16 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/24 18:30:55 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/24 18:32:06 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 20:30:08 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "bvh.h"
 
-void			cyl_nrml(const void *const cyl, t_hinfo *hi)
+void	cyl_nrml(const void *const cyl, t_hinfo *hi)
 {
-	const t_cyl	*c = (t_cyl*)cyl;
+	const t_cyl	*c = (t_cyl *)cyl;
 	t_vec3f		oc;
 	t_vec3f		tmp;
 	float		y;
@@ -44,10 +44,10 @@ static float	setxyabc(const t_cyl *cyl, const t_ray *r, float *xyhabc)
 	return (xyhabc[2]);
 }
 
-void			cyl_hit(const void *cyl, const t_ray *r, struct s_hit *h,
+void	cyl_hit(const void *cyl, const t_ray *r, struct s_hit *h,
 		const uint32_t res)
 {
-	const t_cyl	*cy = (t_cyl*)cyl;
+	const t_cyl	*cy = (t_cyl *)cyl;
 	float		xyhabc[6];
 	float		ty[2];
 
@@ -72,7 +72,7 @@ void			cyl_hit(const void *cyl, const t_ray *r, struct s_hit *h,
 	}
 }
 
-uint8_t			cyl_bounding(const void *cyl, t_box *bbox)
+uint8_t	cyl_bounding(const void *cyl, t_box *bbox)
 {
 	const t_cyl *const	cy = (t_cyl *)cyl;
 	t_vec3f				e;
@@ -87,22 +87,21 @@ uint8_t			cyl_bounding(const void *cyl, t_box *bbox)
 	add_(cy->pa, e, t1);
 	add_(cy->pb, e, t2);
 	set_vector(bbox->max, fmaxf(t1[0], t2[0]), fmaxf(t1[1], t2[1]),
-			fmaxf(t1[2], t2[2]));
+		fmaxf(t1[2], t2[2]));
 	sub_(cy->pa, e, t1);
 	sub_(cy->pb, e, t2);
 	set_vector(bbox->min, fminf(t1[0], t2[0]), fminf(t1[1], t2[1]),
-			fminf(t1[2], t2[2]));
+		fminf(t1[2], t2[2]));
 	sub_(bbox->max, bbox->min, bbox->extent);
 	return (1);
 }
 
-uint8_t			cyl_parser(struct s_prescene *ps, const char *s,
-		uint32_t *pos_num)
+uint8_t	cyl_parser(struct s_prescene *ps, const char *s, uint32_t *pos_num)
 {
 	t_cyl	*cyl;
 	t_vec3f	center_o[2];
 
-	cyl = (t_cyl*)(ps->prmtvs_data + *pos_num);
+	cyl = (t_cyl *)(ps->prmtvs_data + *pos_num);
 	ps->prmtvs.prmtvs[pos_num[1]].prmtv = cyl;
 	ps->prmtvs.prmtvs[pos_num[1]].mtrl = ps->mtrls_data + pos_num[1];
 	ps->prmtvs.prmtvs[pos_num[1]].type = CY;

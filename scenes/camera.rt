@@ -1,0 +1,30 @@
+# resolution aleatoir
+R 1000 1000
+#les lumieres osef
+A  0.2 255,255,255
+l  300,0,0	0.6 0,255,255
+l  0,300,0	0.6 255,0,255
+l  0,0,300	0.6 255,255,0
+
+#camera long axe x
+c  30,0,0	0,0,0 50
+
+#camera long axe y
+c  0,30,0	0,0,0 50
+
+#camera long axe z
+c  0,0,30	0,0,0 50
+
+#fun cam
+c 13.501,3.997,26.903 0,0,0 50 1
+
+
+#random scene add what you want
+py 0,0,0	0,1,0 5  8	123,234,145	1 4 80 0 12	235,34,42
+
+pl 0,-1,0	0,1,0	150,150,150 1 2 80 0 10 0,0,0
+
+sp 10,1,3	3		34,54,67		1 5 90 0 0.3	123,212,4
+
+#sphere mapping
+sp -10,1,3	3		0,0,0	1 6	90	0 texture/macron.xpm

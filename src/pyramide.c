@@ -6,17 +6,17 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/14 10:56:38 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/22 20:32:50 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 20:20:13 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "vectors.h"
 
-static void		set_box(t_sqr *sqr, t_vec3f *co, float circum)
+static void	set_box(t_sqr *sqr, t_vec3f *co, float circum)
 {
-	t_vec3f uv[2];
-	t_vec3f diag[2];
+	t_vec3f	uv[2];
+	t_vec3f	diag[2];
 
 	if (!sqr->n[0])
 		crossp(sqr->n, (t_vec3f){1, 0, 0}, uv[0]);
@@ -35,7 +35,7 @@ static void		set_box(t_sqr *sqr, t_vec3f *co, float circum)
 	sub_(sqr->pts, diag[0], co[2]);
 	sub_(sqr->pts, diag[1], co[3]);
 	set_vector(uv[1], fabs(sqr->n[0]) * 0.001, fabs(sqr->n[1]) * 0.001,
-			fabs(sqr->n[2]) * 0.001);
+		fabs(sqr->n[2]) * 0.001);
 	add_(diag[0], uv[1], uv[0]);
 	add_(sqr->pts, uv[0], sqr->max);
 	sub_(sqr->pts, uv[0], sqr->min);
@@ -44,9 +44,9 @@ static void		set_box(t_sqr *sqr, t_vec3f *co, float circum)
 static uint8_t	parse_sqr(struct s_prescene *ps, const char *s, t_vec3f *co,
 		uint32_t *pos_num)
 {
-	t_sqr *sqr;
+	t_sqr	*sqr;
 
-	sqr = (t_sqr*)(ps->prmtvs_data + *pos_num);
+	sqr = (t_sqr *)(ps->prmtvs_data + *pos_num);
 	ps->prmtvs.prmtvs[pos_num[1]].prmtv = sqr;
 	ps->prmtvs.prmtvs[pos_num[1]].mtrl = ps->mtrls_data + pos_num[1];
 	ps->prmtvs.prmtvs[pos_num[1]].type = SQ;
@@ -65,7 +65,7 @@ static uint8_t	parse_sqr(struct s_prescene *ps, const char *s, t_vec3f *co,
 	return (1);
 }
 
-static void		parse_trg(t_trgl *trgl, t_vec3f p1, t_vec3f p2, t_vec3f p3)
+static void	parse_trg(t_trgl *trgl, t_vec3f p1, t_vec3f p2, t_vec3f p3)
 {
 	equal_(trgl->p1, p1);
 	equal_(trgl->p2, p2);
@@ -76,7 +76,7 @@ static void		parse_trg(t_trgl *trgl, t_vec3f p1, t_vec3f p2, t_vec3f p3)
 	normalize(trgl->n);
 }
 
-uint8_t			pyr_parser(struct s_prescene *ps, const char *s,
+uint8_t	pyr_parser(struct s_prescene *ps, const char *s,
 		uint32_t *pos_num)
 {
 	t_trgl		*trgl;
@@ -90,7 +90,7 @@ uint8_t			pyr_parser(struct s_prescene *ps, const char *s,
 	i = 0;
 	while (i < 4)
 	{
-		trgl = (t_trgl*)(ps->prmtvs_data + *pos_num);
+		trgl = (t_trgl *)(ps->prmtvs_data + *pos_num);
 		ps->prmtvs.prmtvs[pos_num[1]].prmtv = trgl;
 		ps->prmtvs.prmtvs[pos_num[1]].mtrl = ps->mtrls_data + pos_num[1];
 		ps->prmtvs.prmtvs[pos_num[1]].type = T;

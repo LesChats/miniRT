@@ -6,14 +6,16 @@
 /*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/18 20:53:34 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/21 13:55:26 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/24 17:16:53 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tracer.h"
 
-static uint32_t			return_trgb(t_vec3f color, uint8_t filter)
+static uint32_t	return_trgb(t_vec3f color, uint8_t filter)
 {
+	uint32_t	res;
+
 	if (filter)
 	{
 		color[0] = color[0] * 0.393 + color[1] * 0.769 + color[2] * 0.189;
@@ -27,13 +29,14 @@ static uint32_t			return_trgb(t_vec3f color, uint8_t filter)
 		color[1] = 255.f;
 	if (color[2] > 255.f)
 		color[2] = 255.f;
-	return ((uint32_t)color[0] << 16 | (uint32_t)color[1] << 8 |
-			(uint32_t)color[2]);
+	res = (uint32_t)color[0] << 16 | (uint32_t)color[1] << 8
+		| (uint32_t)color[2];
+	return (res);
 }
 
-static void				sum_color(t_vec3f *colors, const uint32_t num)
+static void	sum_color(t_vec3f *colors, const uint32_t num)
 {
-	uint32_t i;
+	uint32_t	i;
 
 	i = 1;
 	while (i < num)
@@ -61,7 +64,7 @@ static inline uint32_t	sampler(const struct s_bvhl *s, const t_cam *cam,
 		j = -1;
 		while (++j < ANTIALIASING)
 			genray(cam, r + i * ANTIALIASING + j, a + (((float)i) * offset),
-					b + (((float)j) * offset));
+				b + (((float)j) * offset));
 	}
 	i = -1;
 	while (++i < ANTIALIASING)
@@ -69,13 +72,13 @@ static inline uint32_t	sampler(const struct s_bvhl *s, const t_cam *cam,
 		j = -1;
 		while (++j < ANTIALIASING)
 			getcolor(s, r + i * ANTIALIASING + j,
-					colors[i * ANTIALIASING + j], 0);
+				colors[i * ANTIALIASING + j], 0);
 	}
 	sum_color(colors, ANTI2);
 	return (return_trgb(colors[0], cam->filter));
 }
 
-static void				rendetr(void *data)
+static void	rendetr(void *data)
 {
 	t_tdata			*d;
 	uint32_t		ij[2];
@@ -96,14 +99,14 @@ static void				rendetr(void *data)
 			kl[0] = -1;
 			while (++kl[0] < TILESIZE)
 			{
-				d->cam->addr[(ij[1] + kl[1]) * d->res + (ij[0] + kl[0])] =
-					sampler(d->s, d->cam, ij[0] + kl[0], ij[1] + kl[1]);
+				d->cam->addr[(ij[1] + kl[1]) *d->res + (ij[0] + kl[0])]
+					= sampler(d->s, d->cam, ij[0] + kl[0], ij[1] + kl[1]);
 			}
 		}
 	}
 }
 
-void					render(const struct s_scene *s, const t_cam *cam)
+void	render(const struct s_scene *s, const t_cam *cam)
 {
 	t_tdata		tdata;
 	pthread_t	thread[NUM_THREADS];

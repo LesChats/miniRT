@@ -6,7 +6,7 @@
 /*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/19 13:44:33 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/24 17:02:45 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 19:11:04 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 static void	free_scene(struct s_scene *s, void *mlx)
 {
-	uint32_t i;
+	uint32_t	i;
 
 	i = 0;
 	while (i < s->cams.count)
@@ -40,14 +40,14 @@ static void	free_scene(struct s_scene *s, void *mlx)
 
 static void	free_sky(struct s_skybox *sky, void *mlx)
 {
-	uint32_t i;
+	uint32_t	i;
 
 	i = 0;
 	while (i < 6)
 		mlx_destroy_image(mlx, sky->skyimg[i++]);
 }
 
-int			end_wind(struct s_mlx *m)
+int	end_wind(struct s_mlx *m)
 {
 	mlx_destroy_window(m->mlx, m->mlx_win);
 	if (*m->s->render.sky.skybox)
@@ -58,7 +58,7 @@ int			end_wind(struct s_mlx *m)
 	exit(0);
 }
 
-void		free_prescene(struct s_prescene *ps, void *mlx)
+void	free_prescene(struct s_prescene *ps, void *mlx)
 {
 	if (ps->tracker.s)
 		free(ps->tracker.s);

@@ -6,7 +6,7 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/14 14:12:27 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/24 12:49:37 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 20:35:41 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@
 **		save primitvs + cameras + lights
 */
 
-typedef struct		s_string
+typedef struct s_string
 {
 	char			*s;
 	uint32_t		len;
@@ -99,13 +99,12 @@ void				findambiant(t_vec3f amb, const char *s, const uint32_t n);
 ** main parsing functions
 */
 uint8_t				count_prmtvs(uint32_t *prmtvs_arr, t_string *tracker,
-		const int fd);
-uint8_t				fill_myscene(struct s_prescene *ps,
-		const int fd);
+						const int fd);
+uint8_t				fill_myscene(struct s_prescene *ps, const int fd);
 uint8_t				finalscene(struct s_prescene *ps,
-		struct s_scene *const scene);
+						struct s_scene *const scene);
 uint8_t				parse(const char *rt_file, struct s_scene *const scene,
-		struct s_mlx *mlx);
+						struct s_mlx *mlx);
 void				free_prescene(struct s_prescene *ps, void *mlx);
 
 /*
@@ -114,29 +113,29 @@ void				free_prescene(struct s_prescene *ps, void *mlx);
 typedef uint8_t		(*t_parser)(struct s_prescene*, const char *, uint32_t*);
 
 uint8_t				sphrs_parser(struct s_prescene *ps, const char *s,
-		uint32_t *pos_num);
+						uint32_t *pos_num);
 uint8_t				pln_parser(struct s_prescene *ps, const char *s,
-		uint32_t *pos_num);
+						uint32_t *pos_num);
 uint8_t				sqr_parser(struct s_prescene *ps, const char *s,
-		uint32_t *pos_num);
+						uint32_t *pos_num);
 uint8_t				cyl_parser(struct s_prescene *ps, const char *s,
-		uint32_t *pos_num);
+						uint32_t *pos_num);
 uint8_t				trgl_parser(struct s_prescene *ps, const char *s,
-		uint32_t *pos_num);
+						uint32_t *pos_num);
 uint8_t				cps_parser(struct s_prescene *ps, const char *s,
-		uint32_t *pos_num);
+						uint32_t *pos_num);
 uint8_t				pyr_parser(struct s_prescene *ps, const char *s,
-		uint32_t *pos_num);
+						uint32_t *pos_num);
 uint8_t				cub_parser(struct s_prescene *ps, const char *s,
-		uint32_t *pos_num);
+						uint32_t *pos_num);
 uint8_t				cams_parser(struct s_prescene *ps, const char *s,
-		uint32_t *pos_num);
+						uint32_t *pos_num);
 uint8_t				lght_parser(struct s_prescene *ps, const char *s,
-		uint32_t *pos_num);
+						uint32_t *pos_num);
 uint8_t				ambnt_parser(struct s_prescene *ps, const char *s,
-		uint32_t *pos_num);
+						uint32_t *pos_num);
 uint8_t				rsltn_parser(struct s_prescene *ps, const char *s,
-		uint32_t *pos_num);
+						uint32_t *pos_num);
 
 /*
 **	Textures parsing

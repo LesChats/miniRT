@@ -6,22 +6,22 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/20 20:14:41 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/25 00:53:45 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 19:44:29 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "bvh.h"
 
-inline void		swapp(t_prmtv *a, t_prmtv *b)
+inline void	swapp(t_prmtv *a, t_prmtv *b)
 {
-	const t_prmtv tmp = *a;
+	const t_prmtv	tmp = *a;
 
 	*a = *b;
 	*b = tmp;
 }
 
-static void		destroy_presene(struct s_prescene *ps)
+static void	destroy_presene(struct s_prescene *ps)
 {
 	free(ps->tracker.s);
 	free(ps->prmtvs_data);
@@ -37,9 +37,11 @@ static uint8_t	reorder_data(struct s_scene *s, t_prmtv *p,
 	uint32_t		i;
 	uint32_t		pos;
 
-	if (!(s->prmtvs = malloc(n)))
+	s->prmtvs = malloc(n);
+	if (!s->prmtvs)
 		return (return_message("Fail to allocated memorie for prmtvs"));
-	if (!(s->mtrls = (t_material*)malloc(sizeof(t_material) * size)))
+	s->mtrls = (t_material *)malloc(sizeof(t_material) * size);
+	if (!s->mtrls)
 		return (return_message("Fail to allocated memorie for mtrls"));
 	i = 0;
 	pos = 0;
@@ -55,7 +57,7 @@ static uint8_t	reorder_data(struct s_scene *s, t_prmtv *p,
 	return (1);
 }
 
-uint8_t			finalscene(struct s_prescene *ps, struct s_scene *const scene)
+uint8_t	finalscene(struct s_prescene *ps, struct s_scene *const scene)
 {
 	scene->cams = ps->cams;
 	scene->rsltn[0] = ps->rsltn[0];
@@ -73,7 +75,7 @@ uint8_t			finalscene(struct s_prescene *ps, struct s_scene *const scene)
 	if (!(builder(&scene->render.bvh)))
 		return (return_message("Fail to counstruct the BVH !"));
 	if (!(reorder_data(scene, scene->render.bvh.prmtvs.prmtvs,
-					ps->total_size)))
+				ps->total_size)))
 		return (return_message("Fail to reorder the data || finalScene.c"));
 	destroy_presene(ps);
 	return (1);

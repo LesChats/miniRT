@@ -6,15 +6,15 @@
 /*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/18 13:49:03 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/21 12:52:17 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 20:26:15 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bvh.h"
 
-void				cps_nrml(const void *const cps, t_hinfo *hi)
+void	cps_nrml(const void *const cps, t_hinfo *hi)
 {
-	const t_cps *cp = (t_cps*)cps;
+	const t_cps	*cp = (t_cps *)cps;
 	t_vec3f		pa;
 	t_vec3f		tmp;
 	float		h;
@@ -30,10 +30,10 @@ void				cps_nrml(const void *const cps, t_hinfo *hi)
 	s_scale(hi->n, 1.f / cp->r, hi->n);
 }
 
-static float		setxyabc(const t_cps *cp, const t_ray *r, float *comp,
+static float	setxyabc(const t_cps *cp, const t_ray *r, float *comp,
 		float *abch)
 {
-	t_vec3f oa;
+	t_vec3f	oa;
 
 	sub_(r->o, cp->pa, oa);
 	comp[0] = dotp(cp->ba, r->d);
@@ -53,7 +53,7 @@ static inline void	setreturn(struct s_hit *h, const uint32_t res, float t)
 	h->p = res;
 }
 
-void				cps_hit(const void *cps, const t_ray *r, struct s_hit *h,
+void	cps_hit(const void *cps, const t_ray *r, struct s_hit *h,
 		const uint32_t res)
 {
 	const t_cps	*cp = (t_cps*)cps;
@@ -68,7 +68,10 @@ void				cps_hit(const void *cps, const t_ray *r, struct s_hit *h,
 	ty[1] = comp[1] + ty[0] * comp[0];
 	if (ty[1] > 0.0 && ty[1] < cp->baba && ty[0] < h->t && ty[0] > h->min)
 		return (setreturn(h, res, ty[0]));
-	(ty[1] <= 0.f) ? sub_(r->o, cp->pa, oc) : sub_(r->o, cp->pb, oc);
+	if (ty[1] <= 0.f)
+		sub_(r->o, cp->pa, oc);
+	else
+		sub_(r->o, cp->pb, oc);
 	abch[1] = dotp(r->d, oc);
 	abch[2] = dotp(oc, oc) - cp->r2;
 	abch[3] = abch[1] * abch[1] - abch[2];

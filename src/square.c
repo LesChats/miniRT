@@ -6,24 +6,24 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 10:45:03 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/22 20:36:55 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 20:13:11 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "bvh.h"
 
-void		sqr_nrml(const void *const sqr, t_hinfo *hi)
+void	sqr_nrml(const void *const sqr, t_hinfo *hi)
 {
-	const t_sqr *s = (t_sqr*)sqr;
+	const t_sqr	*s = (t_sqr *)sqr;
 
 	equal_(hi->n, s->n);
 }
 
-void		sqr_hit(const void *sqr, const t_ray *r, struct s_hit *h,
+void	sqr_hit(const void *sqr, const t_ray *r, struct s_hit *h,
 		const uint32_t res)
 {
-	const t_sqr		*sq = (t_sqr*)sqr;
+	const t_sqr		*sq = (t_sqr *)sqr;
 	const float		deno = dotp(r->d, sq->n);
 	t_vec3f			tmp;
 	t_vec3f			hit;
@@ -45,9 +45,9 @@ void		sqr_hit(const void *sqr, const t_ray *r, struct s_hit *h,
 	}
 }
 
-uint8_t		sqr_bounding(const void *sqr, t_box *bbox)
+uint8_t	sqr_bounding(const void *sqr, t_box *bbox)
 {
-	const t_sqr *const s = (t_sqr *)sqr;
+	const t_sqr *const	s = (t_sqr *)sqr;
 
 	equal_(bbox->max, s->max);
 	equal_(bbox->min, s->min);
@@ -57,8 +57,8 @@ uint8_t		sqr_bounding(const void *sqr, t_box *bbox)
 
 static void	getsqr_box(t_sqr *sqr, float cir)
 {
-	t_vec3f uv[2];
-	t_vec3f large;
+	t_vec3f	uv[2];
+	t_vec3f	large;
 
 	if (!sqr->n[0])
 		crossp(sqr->n, (t_vec3f){1, 0, 0}, uv[0]);
@@ -69,7 +69,7 @@ static void	getsqr_box(t_sqr *sqr, float cir)
 	set_vector(uv[0], fabs(uv[0][0]), fabs(uv[0][1]), fabs(uv[0][2]));
 	set_vector(uv[1], fabs(uv[1][0]), fabs(uv[1][1]), fabs(uv[1][2]));
 	set_vector(large, fabs(sqr->n[0]) * 0.001, fabs(sqr->n[1]) * 0.001,
-			fabs(sqr->n[2]) * 0.001);
+		fabs(sqr->n[2]) * 0.001);
 	add_(uv[1], uv[0], uv[0]);
 	s_scale(uv[0], cir, uv[0]);
 	add_(uv[0], large, uv[0]);
@@ -77,11 +77,11 @@ static void	getsqr_box(t_sqr *sqr, float cir)
 	sub_(sqr->pts, uv[0], sqr->min);
 }
 
-uint8_t		sqr_parser(struct s_prescene *ps, const char *s, uint32_t *pos_num)
+uint8_t	sqr_parser(struct s_prescene *ps, const char *s, uint32_t *pos_num)
 {
-	t_sqr *sqr;
+	t_sqr	*sqr;
 
-	sqr = (t_sqr*)(ps->prmtvs_data + *pos_num);
+	sqr = (t_sqr *)(ps->prmtvs_data + *pos_num);
 	ps->prmtvs.prmtvs[pos_num[1]].prmtv = sqr;
 	ps->prmtvs.prmtvs[pos_num[1]].mtrl = ps->mtrls_data + pos_num[1];
 	ps->prmtvs.prmtvs[pos_num[1]].type = SQ;

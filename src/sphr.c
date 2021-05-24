@@ -6,7 +6,7 @@
 /*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 18:14:08 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/23 16:31:45 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 20:31:39 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 void	sphr_nrml(const void *const sphr, t_hinfo *hi)
 {
-	const t_sphr	*s = (t_sphr*)sphr;
+	const t_sphr	*s = (t_sphr *)sphr;
 
 	sub_(hi->r->o, s->center, hi->n);
 	s_scale(hi->n, 1.f / s->radius, hi->n);
@@ -24,7 +24,7 @@ void	sphr_nrml(const void *const sphr, t_hinfo *hi)
 void	sphr_hit(const void *sphr, const t_ray *r, struct s_hit *h,
 		const uint32_t res)
 {
-	const t_sphr	*sp = (t_sphr*)sphr;
+	const t_sphr	*sp = (t_sphr *)sphr;
 	t_vec3f			oc;
 	float			bc[2];
 
@@ -52,7 +52,7 @@ void	sphr_hit(const void *sphr, const t_ray *r, struct s_hit *h,
 
 uint8_t	sphr_bounding(const void *sphr, t_box *bbox)
 {
-	const t_sphr *const s = (t_sphr *)sphr;
+	const t_sphr *const	s = (t_sphr *)sphr;
 
 	set_vector(bbox->min, -s->radius, -s->radius, -s->radius);
 	set_vector(bbox->max, s->radius, s->radius, s->radius);
@@ -64,9 +64,9 @@ uint8_t	sphr_bounding(const void *sphr, t_box *bbox)
 
 uint8_t	sphrs_parser(struct s_prescene *ps, const char *s, uint32_t *pos_num)
 {
-	t_sphr *sphr;
+	t_sphr	*sphr;
 
-	sphr = (t_sphr*)(ps->prmtvs_data + *pos_num);
+	sphr = (t_sphr *)(ps->prmtvs_data + *pos_num);
 	ps->prmtvs.prmtvs[pos_num[1]].prmtv = sphr;
 	ps->prmtvs.prmtvs[pos_num[1]].mtrl = ps->mtrls_data + pos_num[1];
 	ps->prmtvs.prmtvs[pos_num[1]].type = SP;

@@ -6,7 +6,7 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/13 14:13:40 by abaudot           #+#    #+#             */
-/*   Updated: 2021/04/21 12:26:12 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/05/23 20:30:40 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 void	trgl_nrml(const void *const trgl, t_hinfo *hi)
 {
-	const t_trgl *t = (t_trgl*)trgl;
+	const t_trgl	*t = (t_trgl *)trgl;
 
 	equal_(hi->n, t->n);
 }
@@ -49,23 +49,23 @@ void	trgl_hit(const void *trgl, const t_ray *r, struct s_hit *h,
 
 uint8_t	trgl_bounding(const void *trgl, t_box *bbox)
 {
-	const t_trgl *const t = (t_trgl *)trgl;
+	const t_trgl *const	t = (t_trgl *)trgl;
 
 	set_vector(bbox->max, fmaxf(t->p1[0], fmaxf(t->p2[0], t->p3[0])),
-			fmaxf(t->p1[1], fmaxf(t->p2[1], t->p3[1])),
-			fmaxf(t->p1[2], fmaxf(t->p2[2], t->p3[2])));
+		fmaxf(t->p1[1], fmaxf(t->p2[1], t->p3[1])),
+		fmaxf(t->p1[2], fmaxf(t->p2[2], t->p3[2])));
 	set_vector(bbox->min, fminf(t->p1[0], fminf(t->p2[0], t->p3[0])),
-			fminf(t->p1[1], fminf(t->p2[1], t->p3[1])),
-			fminf(t->p1[2], fminf(t->p2[2], t->p3[2])));
+		fminf(t->p1[1], fminf(t->p2[1], t->p3[1])),
+		fminf(t->p1[2], fminf(t->p2[2], t->p3[2])));
 	sub_(bbox->max, bbox->min, bbox->extent);
 	return (1);
 }
 
 uint8_t	trgl_parser(struct s_prescene *ps, const char *s, uint32_t *pos_num)
 {
-	t_trgl *trgl;
+	t_trgl	*trgl;
 
-	trgl = (t_trgl*)(ps->prmtvs_data + *pos_num);
+	trgl = (t_trgl *)(ps->prmtvs_data + *pos_num);
 	ps->prmtvs.prmtvs[pos_num[1]].prmtv = trgl;
 	ps->prmtvs.prmtvs[pos_num[1]].mtrl = ps->mtrls_data + pos_num[1];
 	ps->prmtvs.prmtvs[pos_num[1]].type = T;
