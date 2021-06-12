@@ -6,7 +6,7 @@
 /*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/18 13:30:17 by abaudot           #+#    #+#             */
-/*   Updated: 2021/05/24 16:50:29 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/06/12 14:23:33 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,5 +122,5 @@ void					setcolorfromint(int32_t	c, t_vec3f color);
 **	Loop and Hook
 */
 
-void				hookloop(struct s_mlx *mlx, uint8_t save);
+void					hookloop(struct s_mlx *mlx, uint8_t save);
 #endif

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minirt.c                                           :+:      :+:    :+:   */
+/*   hookloop.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 10:42:34 by abaudot           #+#    #+#             */
-/*   Updated: 2021/05/23 20:08:08 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/06/12 14:22:55 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static int	mousehandle(uint32_t key, int x, int y, struct s_mlx *m)
 	return (0);
 }
 
-static int frame(struct s_mlx *mlx)
+static int	frame(struct s_mlx *mlx)
 {
 	mlx_put_image_to_window(mlx->mlx, mlx->mlx_win,
 		mlx->s->cams.cams[mlx->cam_id].img, 0, 0);
