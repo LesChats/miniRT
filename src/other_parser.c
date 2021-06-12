@@ -21,6 +21,8 @@ uint8_t	rsltn_parser(struct s_prescene *ps, const char *s,
 	ps->rsltn[1] = ft_atoi(&s);
 	if (ps->rsltn[0] < 1 || ps->rsltn[1] < 1)
 		return (return_message("Please enter a correct resolution"));
+	if (*s && (*s != ' ' && *s != '\t' && *s != '\n'))
+		return (return_message("please entrer ONLY the resolution"));
 	return (1);
 }
 

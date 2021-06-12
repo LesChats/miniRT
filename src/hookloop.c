@@ -13,7 +13,7 @@
 #include "parser.h"
 #include "tracer.h"
 #include "mlxhandler.h"
-/*
+
 static int	keyboardhandle(uint32_t key, struct s_mlx *m)
 {
 	if (key == ESC)
@@ -66,69 +66,22 @@ static int	mousehandle(uint32_t key, int x, int y, struct s_mlx *m)
 	}
 	return (0);
 }
-static void	hookloop(struct s_mlx *mlx, uint8_t save)
+
+static int frame(struct s_mlx *mlx)
+{
+	mlx_put_image_to_window(mlx->mlx, mlx->mlx_win,
+		mlx->s->cams.cams[mlx->cam_id].img, 0, 0);
+	return (0);
+}
+
+void	hookloop(struct s_mlx *mlx, uint8_t save)
 {
 	if (save != 2)
 	{
-		mlx_put_image_to_window(mlx->mlx, mlx->mlx_win,
-			mlx->s->cams.cams[0].img, 0, 0);
+		mlx_loop_hook(mlx->mlx, frame, mlx);
 		mlx_hook(mlx->mlx_win, CLOSE, 0L, end_wind, mlx);
 		mlx_hook(mlx->mlx_win, 2, 1, keyboardhandle, mlx);
 		mlx_hook(mlx->mlx_win, 4, 4, mousehandle, mlx);
 		mlx_loop(mlx->mlx);
 	}
-}
-*/
-static uint8_t	option(int ac, char **av, struct s_scene *s, void *mlx)
-{
-	uint8_t	sky;
-	uint8_t	res;
-	int32_t	i;
-
-	sky = 0;
-	res = 1;
-	i = 0;
-	while (i < ac)
-	{
-		if (!ft_strncmp(av[i], "--save", 6))
-			res = 2;
-		else if (!sky)
-		{
-			if (!setskybox(&s->render.sky, av[i], mlx))
-				return (return_message("accepted --save or skymap dir"));
-			sky = 1;
-		}
-		else
-			return (return_message("To many or invalid argument !"));
-		++i;
-	}
-	return (res);
-}
-
-int	main(int ac, char **av)
-{
-	struct s_scene	scene;
-	struct s_mlx	mlx;
-	uint32_t		i;
-	uint8_t			save;
-
-	save = 1;
-	if (ac < 2)
-		return (return_message("MiniRT should get at least one argv"));
-	if (!parse(av[1], &scene, &mlx))
-		return (return_message("Parsing error >>>> EXIT"));
-	if (ac > 2)
-		save = option(ac - 2, av + 2, &scene, mlx.mlx);
-	if (!save)
-		return (1);
-	setup(&scene, &mlx, save);
-	info_message(&scene);
-	i = 0;
-	while (i < scene.cams.count)
-		render(&scene, &scene.cams.cams[i++]);
-	if (save == 2)
-		if (!scenetobmp(&scene, scene.cams.cams))
-			return_messageonly("While saving scene to .bmp !");
-	hookloop(&mlx, save);
-	return (0);
 }

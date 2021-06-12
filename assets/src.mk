@@ -37,3 +37,4 @@ SRCS += src/vectors1.c
 SRCS += src/vectors2.c
 SRCS += src/vectors.c
 SRCS += src/whitted_rt.c
+SRCS += src/hookloop.c

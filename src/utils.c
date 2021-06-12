@@ -46,6 +46,8 @@ uint8_t	vect_parse(t_vec3f v, const char **s)
 		return (0);
 	++(*s);
 	v[2] = ft_atof(s);
+	if(**s && (**s != ' ' && **s != '\t' && **s != '\n'))
+		return (0);
 	return (1);
 }
 

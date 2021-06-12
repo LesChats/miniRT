@@ -118,4 +118,9 @@ void					fromtext(t_vec3f color, const t_hinfo *h,
 float					noise(t_vec3f in);
 void					setcolorfromint(int32_t	c, t_vec3f color);
 
+/*
+**	Loop and Hook
+*/
+
+void				hookloop(struct s_mlx *mlx, uint8_t save);
 #endif
