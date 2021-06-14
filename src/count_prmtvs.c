@@ -6,7 +6,7 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 10:02:32 by abaudot           #+#    #+#             */
-/*   Updated: 2021/05/23 19:44:52 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/06/14 18:46:06 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,11 @@ static uint8_t	add_prmtv(const char a, const char b,
 		return (update(prmtv_arr, track, CY));
 	if ((a == 't') & ((b == 'r')))
 		return (update(prmtv_arr, track, T));
-	if ((a == 'c') & ((b == ' ') | (b == '\t')))
+	if ((a == 'c' || a == 'C') & ((b == ' ') | (b == '\t')))
 		return (update(prmtv_arr, track, C));
 	if ((a == 'c') & (b == 'p'))
 		return (update(prmtv_arr, track, CP));
-	if ((a == 'l') & ((b == ' ') | (b == '\t')))
+	if ((a == 'l' || a == 'L') & ((b == ' ') | (b == '\t')))
 		return (update(prmtv_arr, track, L));
 	else
 		return (check_compound(a, b, prmtv_arr, track));
