@@ -40,7 +40,8 @@ void	set_cam(t_cam *cam, const float xres)
 	t_vec3f	u;
 	t_vec3f	v;
 
-	sub_(cam->pts, cam->orient, cam->ref[0]);
+	equal_(cam->ref[0], cam->orient);
+	inv_(cam->ref[0], cam->ref[0]);
 	normalize(cam->ref[0]);
 	crossp((t_vec3f){0.f, 1.f, 0.f}, cam->ref[0], cam->ref[1]);
 	normalize(cam->ref[1]);
