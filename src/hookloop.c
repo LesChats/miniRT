@@ -6,7 +6,7 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 10:42:34 by abaudot           #+#    #+#             */
-/*   Updated: 2021/06/12 14:22:55 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/06/27 15:51:38 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,11 @@ static int	mousehandle(uint32_t key, int x, int y, struct s_mlx *m)
 		orient = m->s->cams.cams[m->cam_id].orient;
 		resx = m->s->rsltn[0] / 2;
 		resy = m->s->rsltn[1] / 2;
+#ifdef LINUX
 		mlx_mouse_get_pos(m->mlx, m->mlx_win, &x, &y);
+#else
+		mlx_mouse_get_pos(m->mlx,  &x, &y);
+#endif
 		s_scale(m->s->cams.cams[m->cam_id].ref[2],
 			(y > resy) - (y < resy), tmp);
 		s_scale(m->s->cams.cams[m->cam_id].ref[1],

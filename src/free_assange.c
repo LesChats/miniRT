@@ -6,7 +6,7 @@
 /*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/19 13:44:33 by abaudot           #+#    #+#             */
-/*   Updated: 2021/05/23 19:11:04 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/06/27 15:29:42 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,9 @@ int	end_wind(struct s_mlx *m)
 	if (*m->s->render.sky.skybox)
 		free_sky(&m->s->render.sky, m->mlx);
 	free_scene(m->s, m->mlx);
+# ifdef LINUX
 	mlx_destroy_display(m->mlx);
+# endif
 	free(m->mlx);
 	exit(0);
 }
@@ -72,6 +74,8 @@ void	free_prescene(struct s_prescene *ps, void *mlx)
 		free(ps->cams.cams);
 	if (ps->lghts.lghts)
 		free(ps->lghts.lghts);
+# ifdef LINUX
 	mlx_destroy_display(mlx);
+# endif
 	free(mlx);
 }

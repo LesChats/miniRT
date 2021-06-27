@@ -6,7 +6,7 @@
 /*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/18 20:53:34 by abaudot           #+#    #+#             */
-/*   Updated: 2021/05/24 17:16:53 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/06/27 16:52:14 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ static void	rendetr(void *data)
 			kl[0] = -1;
 			while (++kl[0] < TILESIZE)
 			{
-				d->cam->addr[(ij[1] + kl[1]) *d->res + (ij[0] + kl[0])]
+				d->cam->addr[(ij[1] + kl[1]) * d->res + (ij[0] + kl[0])]
 					= sampler(d->s, d->cam, ij[0] + kl[0], ij[1] + kl[1]);
 			}
 		}

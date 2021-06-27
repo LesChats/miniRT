@@ -6,13 +6,12 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/20 20:02:49 by abaudot           #+#    #+#             */
-/*   Updated: 2021/05/23 19:39:56 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/06/27 15:50:06 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "tracer.h"
-#include "mlx_int.h"
 
 void	setcolorfromint(int32_t c, t_vec3f color)
 {

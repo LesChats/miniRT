@@ -6,7 +6,7 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/14 14:48:09 by abaudot           #+#    #+#             */
-/*   Updated: 2021/05/23 19:10:13 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/06/27 15:44:40 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,18 @@ static uint8_t	first_read(const char *rt_file, struct s_prescene *ps)
 	if (fd < 0)
 	{
 		printf("Error: could not open \"%s\"\n", rt_file);
+#ifdef LINUX
 		mlx_destroy_display(ps->mlx);
+#endif
 		free(ps->mlx);
 		exit(1);
 	}
 	if (!prmtvs_arrinit(ps, prmtvs_arr, fd))
 	{
 		free(ps->tracker.s);
+#ifdef LINUX
 		mlx_destroy_display(ps->mlx);
+#endif
 		free(ps->mlx);
 		printf("Error: Could not Initializ array || file: parcer.c\n");
 		exit(1);

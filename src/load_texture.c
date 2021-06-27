@@ -6,12 +6,11 @@
 /*   By: abaudot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/17 15:14:10 by abaudot           #+#    #+#             */
-/*   Updated: 2021/05/23 19:49:35 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/06/27 15:43:36 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-#include "mlx_int.h"
 
 static void	skyimg(struct s_skybox *sky, char *relativepath, void *mlx,
 		const uint32_t n)
@@ -41,16 +40,20 @@ uint8_t	setskybox(struct s_skybox *sky, char *filename, void *mlx)
 	const uint32_t	n = ft_strlen(filename);
 	uint32_t		i;
 	char			relativepath[1024];
+	//////////////////////////
+	int bit_per_pixel, line_lenght, endian;
 
 	if (n > 1015 || open(filename, O_DIRECTORY) < 0)
 		return (return_message("Wrong path or too long path -fatal"));
 	ft_memcpy(relativepath, filename, n);
 	skyimg(sky, relativepath, mlx, n);
 	i = 0;
+		//	sky->skybox[i] = (int *)(((t_img *)sky->skyimg[i])->data);
 	while (i < 6)
 	{
 		if (sky->skyimg[i])
-			sky->skybox[i] = (int *)(((t_img *)sky->skyimg[i])->data);
+			sky->skybox[i] = (int *)mlx_get_data_addr(sky->skyimg[i],
+				&bit_per_pixel, &line_lenght, &endian);
 		else
 		{
 			return (return_message(
@@ -67,6 +70,8 @@ void	grabtexture(void *mlx, struct s_text *t, const char **s)
 {
 	char		relativepath[1024];
 	uint32_t	i;
+	//////////////////////////
+	int bit_per_pixel, line_lenght, endian;
 
 	while (**s == ' ' || **s == '\t')
 		++(*s);
@@ -77,8 +82,9 @@ void	grabtexture(void *mlx, struct s_text *t, const char **s)
 		return (return_messageonly("Path to texture is to long"));
 	relativepath[i] = 0;
 	t->img = mlx_xpm_file_to_image(mlx, relativepath, &t->wdth, &t->hght);
+		//t->addr = (int *)((t_img *)t->img)->data;
 	if (t->img)
-		t->addr = (int *)((t_img *)t->img)->data;
+		t->addr = (int*)mlx_get_data_addr(t->img, &bit_per_pixel, &line_lenght, &endian);
 	else
 		return_messageonly("Occure while loading texture, color is black now");
 }

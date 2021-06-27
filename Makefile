@@ -6,7 +6,7 @@
 #    By: abaudot <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/19 20:59:34 by abaudot           #+#    #+#              #
-#    Updated: 2021/04/25 00:04:45 by abaudot          ###   ########.fr        #
+#    Updated: 2021/06/27 16:43:20 by abaudot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,19 +15,28 @@ CC = gcc
 
 MLX_DIR = mlx_linux
 
-NUM_THREADS = $(shell nproc --all)
+
+UNAME := $(shell uname)
+
+ifeq ($(UNAME),Darwin)
+	NUM_THREADS = $(shell sysctl -n hw.ncpu)
+	LDFLAGS = -Lmlx_mac -lmlx -framework OpenGL -framework AppKit
+	CFLAGS = -Iincludes -Imlx_mac -Ofast -D MACOS
+endif
+
+ifeq ($(UNAME),Linux)
+	NUM_THREADS = $(shell nproc --all)
+	LDFLAGS = -Lmlx_linux -lmlx -lXext -lX11 -lm -lbsd -lpthread
+	CFLAGS = -Iincludes -Imlx_linux -Ofast -D LINUX
+endif
+
 alias = 1
 ANTI = $$(( $(alias) * $(alias) ))
 
-CFLAGS = -Wall -Wextra -Werror -D NUM_THREADS=$(NUM_THREADS) 
+CFLAGS += -Wall -Wextra -Werror -D NUM_THREADS=$(NUM_THREADS) 
 CFLAGS += -D ANTIALIASING=$(alias) -D ANTI2=$(ANTI)
-CFLAGS += -Iincludes -Imlx_linux -Ofast
-LDFLAGS = -Lmlx_linux -lmlx -lXext -lX11 -lm -lbsd -lpthread
-
 OBJS_DIR = objs
-#DEPS_DIR = $(BUILD_DIR)/deps
 
-#PRECOMPILE = mkdir -p $(dir $@)
 PRECOMPILE = mkdir -p $(dir $(OBJS_DIR)/$*)
 
 DEF = \033[0m
