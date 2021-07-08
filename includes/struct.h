@@ -6,7 +6,7 @@
 /*   By: abaudot <abaudot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 11:57:15 by abaudot           #+#    #+#             */
-/*   Updated: 2021/05/24 16:48:12 by abaudot          ###   ########.fr       */
+/*   Updated: 2021/07/08 13:00:37 by abaudot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,7 +232,6 @@ struct				s_mlx
 	void			*mlx;
 	void			*mlx_win;
 	uint32_t		cam_id;
-	int				endian;
 };
 
 /*
