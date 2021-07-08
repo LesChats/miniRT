@@ -23,7 +23,8 @@ The rendering should be way faster than any other miniRT (so far)
     ...
 
 # ToDo
-  a proper Readme
+  a proper Readme  
+  explication about .rt files  
 # Image sample
 
 ![alt text](https://github.com/LesChats/miniRT/blob/master/images/birds.jpg)
