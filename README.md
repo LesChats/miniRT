@@ -2,8 +2,8 @@
 An accelerated mini raytracer for 42 and the 42 world
 
 The main objective of this work was to implement a whitted style raytracer.  
-Regarding the other miniRT you could find on github this work originality and **main contribution** is the implementation of an accelerated tree structure **(BVH)**.  
-The rendering should be way faster than any other miniRT (so far)   
+Regarding the other miniRT that you could find on github this work originality and **main contribution** is the implementation of an accelerated three structure **(namely :BVH)**.  
+Thus the rendering should be way faster than any other miniRT (so far)   
 # Features
     whitted style raytracing
     Multi-thread
@@ -47,4 +47,4 @@ The rendering should be way faster than any other miniRT (so far)
     more info: https://github.com/42Paris/minilibx-linux
 # Warning
     
-    The projet is faaaaaar from perfect, you may encounter bugs playing whit it do not copy past ;)
+    The projet is faaaaaar from perfect, you may encounter bugs  while playing whit it so do not do brainless copy past 😂
