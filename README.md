@@ -23,12 +23,14 @@ The rendering should be way faster than any other miniRT (so far)
 
 # ToDo
   a proper Readme
+# Image sample
 
 ![alt text](https://github.com/LesChats/miniRT/blob/master/images/birds.jpg)
 ![alt text](https://github.com/LesChats/miniRT/blob/master/images/reflexion.jpg)
 ![alt text](https://github.com/LesChats/miniRT/blob/master/images/dragon.jpg)
 ![alt text](https://github.com/LesChats/miniRT/blob/master/images/coumponds.jpg)
 ![alt text](https://github.com/LesChats/miniRT/blob/master/images/cat.jpg)
+![alt text](https://github.com/LesChats/miniRT/blob/master/images/test.jpg)
 
 # Requirements for Linux
 
