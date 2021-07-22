@@ -13,7 +13,8 @@ Thus the rendering should be way faster than any other miniRT (so far)
     Reflection
     Multiple coloring modes:  0:classic 
                               1:normal coloring 
-                              2:checkerbord coloring 3 -> 5: different perlin noise generatade coloring
+                              2:checkerbord coloring 
+                              3 -> 5: different perlin noise generatade coloring
                               6: sphere image mapping
     Bump mapping
     skyboxing
