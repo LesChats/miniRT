@@ -46,6 +46,19 @@ Thus the rendering should be way faster than any other miniRT (so far)
     e.g. sudo apt-get install gcc make xorg libxext-dev libbsd-dev (Debian/Ubuntu)
     
     more info: https://github.com/42Paris/minilibx-linux
+  
+# usage
+    ./miniRT (.rt file) [skymap directory] [--save]
+    exemples:
+        ./miniRT scenes/reflexion.rt skymaps/creek/
+        -- will display the scene reflection.rt whiht the skymap creek
+      
+        ./miniRT scenes/dragon2.rt skymaps/darkness/ --save
+        -- will display the scene dragon2.rt whiht the skymap darkness and save the result to images
+
+        ./miniRT scenes/onlycat.rt
+        -- whill display the scene onlycat.rt
+
 # Warning
     
     The projet is faaaaaar from perfect, you may encounter bugs  while playing whit it so do not do brainless copy past 😂
