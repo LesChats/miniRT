@@ -23,9 +23,6 @@ Thus the rendering should be way faster than any other miniRT (so far)
     image save
     ...
 
-# ToDo
-  a proper Readme  
-  explication about .rt files  
 # Image sample
 
 ![alt text](https://github.com/LesChats/miniRT/blob/master/images/birds.jpg)
